@@ -1,0 +1,107 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "fr.openium.testdrivingdistraction"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // TODO
+    signingConfigs {
+        debug {
+            storeFile file("keys/debug.keystore")
+        }
+        release {
+            storeFile file("keys/release.keystore")
+            storePassword "testdrivingdistraction"
+            keyAlias "testdrivingdistraction"
+            keyPassword "testdrivingdistraction"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+
+            versionNameSuffix '-debug'
+            applicationIdSuffix '.debug'
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    maven { url 'https://maven.openium.fr' }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // --- Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // --- Android
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
+    // --- Android tools
+    implementation 'fr.openium:kotlin-tools:1.0.14'
+    implementation 'fr.openium:realm-tools:1.0.4'
+
+    // --- Koin
+    implementation "org.koin:koin-android:2.2.0-alpha-1"
+    implementation "org.koin:koin-androidx-viewmodel:2.2.0-alpha-1"
+
+    // --- Rx ---
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.6'
+    implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
+    implementation 'com.github.akarnokd:rxjava3-extensions:3.0.1'
+    implementation 'com.github.tbruyelle:rxpermissions:0.12'
+
+    // --- ARCH
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+
+    // --- Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+
+    // --- Maps
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // --- Tests
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}

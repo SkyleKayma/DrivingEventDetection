@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "784640354592",
+    "firebase_url": "https://testdrivingdistraction.firebaseio.com",
+    "project_id": "testdrivingdistraction",
+    "storage_bucket": "testdrivingdistraction.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784640354592:android:37bed7d638de520c200f45",
+        "android_client_info": {
+          "package_name": "fr.openium.testdrivingdistraction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784640354592-tg8m26bi40hnq7s99mjihr7h1uiajodv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAApK1HgKo6o71-1E6veD_E8Bztk4BMhrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784640354592-tg8m26bi40hnq7s99mjihr7h1uiajodv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784640354592:android:9d5b178102fcde71200f45",
+        "android_client_info": {
+          "package_name": "fr.openium.testdrivingdistraction.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784640354592-tg8m26bi40hnq7s99mjihr7h1uiajodv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAApK1HgKo6o71-1E6veD_E8Bztk4BMhrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784640354592-tg8m26bi40hnq7s99mjihr7h1uiajodv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
