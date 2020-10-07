@@ -16,14 +16,6 @@ class PermissionsUtils(private val context: Context) {
         Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
 
-    fun isLocationPermissionGranted(): Boolean =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-    fun isBackgroundLocationPermissionGranted(): Boolean =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-        } else true
-
     fun isReadCallLogPermissionGranted(): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED
 
@@ -32,6 +24,14 @@ class PermissionsUtils(private val context: Context) {
 
     fun isReceiveSMSPermissionGranted(): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
+
+    fun isLocationPermissionGranted(): Boolean =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    fun isBackgroundLocationPermissionGranted(): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+        } else true
 
     fun areAllPermissionsGranted(): Boolean {
         permissionList.forEach {

@@ -1,6 +1,6 @@
 package fr.openium.testdrivingdistraction.ui.fakeEvents
 
-import androidx.lifecycle.ViewModel
+import fr.openium.testdrivingdistraction.base.viewModel.AbstractViewModel
 import fr.openium.testdrivingdistraction.model.TripEvent
 import fr.openium.testdrivingdistraction.repository.TripRepository
 
@@ -9,16 +9,13 @@ import fr.openium.testdrivingdistraction.repository.TripRepository
  */
 class ViewModelFakeEvents(
     private val tripRepository: TripRepository
-) : ViewModel() {
+) : AbstractViewModel() {
 
     fun addScreenOnEvent() =
         tripRepository.addEvent(TripEvent.Type.SCREEN_ON, true)
 
     fun addScreenOffEvent() =
         tripRepository.addEvent(TripEvent.Type.SCREEN_OFF, true)
-
-    fun addScreenLockEvent() =
-        tripRepository.addEvent(TripEvent.Type.SCREEN_LOCK, true)
 
     fun addScreenUnlockEvent() =
         tripRepository.addEvent(TripEvent.Type.SCREEN_UNLOCK, true)
@@ -44,12 +41,6 @@ class ViewModelFakeEvents(
     fun getLastOnOffFakeEvent(): TripEvent? =
         tripRepository.getLastEventOfType(
             listOf(TripEvent.Type.SCREEN_ON, TripEvent.Type.SCREEN_OFF),
-            onlyFake = true
-        )
-
-    fun getLastUnlockLockFakeEvent(): TripEvent? =
-        tripRepository.getLastEventOfType(
-            listOf(TripEvent.Type.SCREEN_UNLOCK, TripEvent.Type.SCREEN_LOCK),
             onlyFake = true
         )
 

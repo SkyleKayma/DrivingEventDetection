@@ -25,14 +25,17 @@ class AdapterDetailList(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = data[position]
 
-        holder.itemView.textViewDetailBeginDate.text =
-            dateUtils.format(dateUtils.parse(item.beginDate, DateUtils.Format.DATE_FULL)?.time ?: 0L, DateUtils.Format.DATE_SHORT_TEXT)
+        holder.itemView.textViewItemDetailBeginDate.text =
+            dateUtils.parseThenFormat(item.beginDate, DateUtils.Format.DATE_FULL, DateUtils.Format.DATE_SHORT_TEXT)
 
-        holder.itemView.textViewDetailEndDate.text =
-            dateUtils.format(dateUtils.parse(item.endDate ?: "", DateUtils.Format.DATE_FULL)?.time ?: 0L, DateUtils.Format.DATE_SHORT_TEXT)
+        holder.itemView.textViewItemDetailEndDate.text =
+            dateUtils.parseThenFormat(item.endDate ?: "", DateUtils.Format.DATE_FULL, DateUtils.Format.DATE_SHORT_TEXT)
 
-        holder.itemView.textViewDetailNbEventsRecorded.text =
-            (item.events.count() + item.sensorEvents.count()).toString()
+        holder.itemView.textViewItemDetailNbEventsRecorded.text =
+            (item.events.count()).toString()
+
+        holder.itemView.textViewItemDetailNbMarkersSet.text =
+            (item.sensorEvents.count()).toString()
 
         holder.itemView.setOnClickListener {
             onItemClicked.invoke(item.beginDate)
@@ -43,4 +46,9 @@ class AdapterDetailList(
         data.count()
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    fun refreshData(data: MutableList<Trip>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 }

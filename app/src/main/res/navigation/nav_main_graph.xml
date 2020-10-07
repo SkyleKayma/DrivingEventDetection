@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/fragmentDetailList"
         android:name="fr.openium.testdrivingdistraction.ui.detailList.FragmentDetailList"
-        android:label="FragmentDetail"
+        android:label="@string/detail_list_screen_title"
         tools:layout="@layout/fragment_detail_list">
         <action
             android:id="@+id/action_fragmentDetail_to_fragmentDetail"
@@ -43,8 +43,8 @@
     <fragment
         android:id="@+id/fragmentDetail"
         android:name="fr.openium.testdrivingdistraction.ui.detail.FragmentDetail"
-        android:label="FragmentDetail"
-        tools:layout="@layout/fragment_detail" >
+        android:label="@string/detail_screen_title"
+        tools:layout="@layout/fragment_detail">
         <argument
             android:name="begin_date"
             app:argType="string" />

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
+    android:layout_marginVertical="6dp"
     android:elevation="2dp"
     app:cardBackgroundColor="@color/colorWhite"
     app:cardCornerRadius="4dp">
@@ -26,11 +26,11 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_item_start_date"
+                android:text="@string/detail_list_item_start_date"
                 android:textColor="@color/colorBlack" />
 
             <TextView
-                android:id="@+id/textViewDetailBeginDate"
+                android:id="@+id/textViewItemDetailBeginDate"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,11 +51,11 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_item_end_date"
+                android:text="@string/detail_list_item_end_date"
                 android:textColor="@color/colorBlack" />
 
             <TextView
-                android:id="@+id/textViewDetailEndDate"
+                android:id="@+id/textViewItemDetailEndDate"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,11 +76,36 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_item_nb_events"
+                android:text="@string/detail_list_item_nb_events"
                 android:textColor="@color/colorBlack" />
 
             <TextView
-                android:id="@+id/textViewDetailNbEventsRecorded"
+                android:id="@+id/textViewItemDetailNbEventsRecorded"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                tools:text="12" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_list_item_nb_markers_set"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/textViewItemDetailNbMarkersSet"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

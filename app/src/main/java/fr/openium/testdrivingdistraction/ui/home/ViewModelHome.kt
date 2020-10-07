@@ -1,6 +1,6 @@
 package fr.openium.testdrivingdistraction.ui.home
 
-import androidx.lifecycle.ViewModel
+import fr.openium.testdrivingdistraction.base.viewModel.AbstractViewModel
 import fr.openium.testdrivingdistraction.model.TripSensorEvent
 import fr.openium.testdrivingdistraction.repository.TripRepository
 
@@ -9,7 +9,7 @@ import fr.openium.testdrivingdistraction.repository.TripRepository
  */
 class ViewModelHome(
     private val tripRepository: TripRepository
-) : ViewModel() {
+) : AbstractViewModel() {
 
     fun startTripRecording() =
         tripRepository.startTripRecording()

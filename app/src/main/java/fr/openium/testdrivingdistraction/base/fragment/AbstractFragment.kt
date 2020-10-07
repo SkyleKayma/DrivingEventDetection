@@ -4,7 +4,7 @@ import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Created by Openium on 19/02/2019.

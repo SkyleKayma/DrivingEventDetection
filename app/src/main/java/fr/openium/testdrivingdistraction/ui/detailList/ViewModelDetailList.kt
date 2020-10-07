@@ -1,15 +1,21 @@
 package fr.openium.testdrivingdistraction.ui.detailList
 
-import androidx.lifecycle.ViewModel
+import fr.openium.testdrivingdistraction.base.viewModel.AbstractViewModel
+import fr.openium.testdrivingdistraction.model.Trip
 import fr.openium.testdrivingdistraction.repository.TripRepository
+import io.reactivex.Flowable
 
 /**
  * Created by lgodart on 18/04/2018.
  */
 class ViewModelDetailList(
     private val tripRepository: TripRepository
-) : ViewModel() {
+) : AbstractViewModel() {
 
-    fun getAllTrips() =
-        tripRepository.getAllTrips()
+    fun getAllTripsObs(): Flowable<MutableList<Trip>> =
+        tripRepository.getAllTripsObs(realm)
+
+    fun insertNewTrip(trip: Trip) {
+        tripRepository.insertNewTrip(trip)
+    }
 }

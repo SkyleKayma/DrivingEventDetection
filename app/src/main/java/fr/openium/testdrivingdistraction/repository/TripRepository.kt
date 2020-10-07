@@ -3,7 +3,9 @@ package fr.openium.testdrivingdistraction.repository
 import android.location.Location
 import fr.openium.testdrivingdistraction.model.*
 import fr.openium.testdrivingdistraction.utils.DateUtils
+import io.reactivex.Flowable
 import io.realm.Realm
+import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
 
 /**
@@ -147,10 +149,11 @@ class TripRepository(private val dateUtils: DateUtils) {
         }
     }
 
-    fun getAllTrips(): MutableList<Trip> =
-        Realm.getDefaultInstance().use { realm ->
-            realm.copyFromRealm(realm.where(Trip::class.java).findAll())
-        }
+    fun getAllTripsObs(realm: Realm): Flowable<MutableList<Trip>> =
+        realm.where(Trip::class.java).findAll()
+            .asFlowable()
+            .filter { it.isLoaded && it.isValid }
+            .map { realm.copyFromRealm(it) }
 
     fun getTrip(beginDate: String) =
         Realm.getDefaultInstance().use { realm ->
@@ -158,4 +161,21 @@ class TripRepository(private val dateUtils: DateUtils) {
                 realm.copyFromRealm(it)
             }
         }
+
+    fun insertNewTrip(trip: Trip) {
+        Realm.getDefaultInstance().use { realm ->
+            realm.executeTransaction {
+                realm.insertOrUpdate(trip)
+            }
+        }
+    }
+
+    fun deleteTrip(trip: Trip) {
+        Realm.getDefaultInstance().use { realm ->
+            realm.executeTransaction {
+                realm.where(Trip::class.java).equalTo(Trip::beginDate.name, trip.beginDate).equalTo(Trip::endDate.name, trip.endDate)
+                    .findFirst()?.deleteFromRealm()
+            }
+        }
+    }
 }

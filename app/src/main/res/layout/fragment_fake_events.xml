@@ -33,20 +33,20 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginEnd="@dimen/home_margin_big_button"
-                    android:text="@string/fake_events_fake_screen_state_toggle_on"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toStartOf="@id/buttonHomeFakeScreenUnlockLockToggle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/fake_events_fake_screen_state_toggle_on" />
 
                 <Button
                     android:id="@+id/buttonHomeFakeScreenUnlockLockToggle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/home_margin_big_button"
-                    android:text="@string/fake_events_fake_screen_toogle_unlock_lock_lock"
+                    android:text="@string/fake_events_fake_screen_unlock"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1:1"

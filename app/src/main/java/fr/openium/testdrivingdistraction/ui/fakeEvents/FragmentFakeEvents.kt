@@ -49,7 +49,6 @@ class FragmentFakeEvents : AbstractFragment(R.layout.fragment_fake_events) {
 
     private fun setDisplay() {
         setFakeScreenOnOffButtonDisplay()
-        setFakeScreenUnlockLockButtonDisplay()
         setFakeCallStatusButtonDisplay()
     }
 
@@ -69,14 +68,7 @@ class FragmentFakeEvents : AbstractFragment(R.layout.fragment_fake_events) {
 
         buttonHomeFakeScreenUnlockLockToggle.setOnClickListener {
             if (isRecording()) {
-                val lastUnlockLockFakeEvent = model.getLastOnOffFakeEvent()
-                when (lastUnlockLockFakeEvent?.type) {
-                    TripEvent.Type.SCREEN_UNLOCK.name ->
-                        model.addScreenLockEvent()
-                    else ->
-                        model.addScreenUnlockEvent()
-                }
-                setFakeScreenUnlockLockButtonDisplay()
+                model.addScreenUnlockEvent()
             } else snackbar(getString(R.string.generic_error_start_record_first), Snackbar.LENGTH_SHORT)
         }
 
@@ -119,14 +111,6 @@ class FragmentFakeEvents : AbstractFragment(R.layout.fragment_fake_events) {
         buttonHomeFakeScreenOnOffToggle.text = when (lastOnOffFakeEvent?.type) {
             TripEvent.Type.SCREEN_ON.name -> getString(R.string.fake_events_fake_screen_state_toggle_on)
             else -> getString(R.string.fake_events_fake_screen_state_toggle_off)
-        }
-    }
-
-    private fun setFakeScreenUnlockLockButtonDisplay() {
-        val lastUnlockLockFakeEvent = model.getLastUnlockLockFakeEvent()
-        buttonHomeFakeScreenUnlockLockToggle.text = when (lastUnlockLockFakeEvent?.type) {
-            TripEvent.Type.SCREEN_UNLOCK.name -> getString(R.string.fake_events_fake_screen_toogle_unlock_lock_unlock)
-            else -> getString(R.string.fake_events_fake_screen_toogle_unlock_lock_lock)
         }
     }
 

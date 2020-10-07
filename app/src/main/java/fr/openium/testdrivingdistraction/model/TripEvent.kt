@@ -1,5 +1,6 @@
 package fr.openium.testdrivingdistraction.model
 
+import fr.openium.testdrivingdistraction.R
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 
@@ -12,15 +13,21 @@ open class TripEvent(
     var isFake: Boolean = false
 ) : RealmModel {
 
-    enum class Type {
-        SCREEN_ON,
-        SCREEN_OFF,
-        SCREEN_UNLOCK,
-        SCREEN_LOCK,
-        RECEIVE_CALL,
-        HOOK_CALL,
-        NOT_HOOK_CALL,
-        SEND_CALL,
-        RECEIVE_SMS
+    enum class Type(val iconId: Int) {
+        SCREEN_ON(R.drawable.ic_event_screen_on),
+        SCREEN_OFF(R.drawable.ic_event_screen_off),
+        SCREEN_UNLOCK(R.drawable.ic_event_screen_unlock),
+        RECEIVE_CALL(R.drawable.ic_event_receive_call),
+        HOOK_CALL(R.drawable.ic_event_hook_call),
+        NOT_HOOK_CALL(R.drawable.ic_event_not_hook),
+        SEND_CALL(R.drawable.ic_event_send_call),
+        RECEIVE_SMS(R.drawable.ic_event_sms_receive),
+        UNKNOWN(R.drawable.ic_event_unknown);
+
+        companion object {
+
+            fun fromString(value: String?): Type =
+                values().find { it.name.equals(value, true) } ?: UNKNOWN
+        }
     }
 }

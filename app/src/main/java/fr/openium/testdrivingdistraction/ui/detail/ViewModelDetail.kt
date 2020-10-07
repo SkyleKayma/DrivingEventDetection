@@ -1,6 +1,7 @@
 package fr.openium.testdrivingdistraction.ui.detail
 
-import androidx.lifecycle.ViewModel
+import fr.openium.testdrivingdistraction.base.viewModel.AbstractViewModel
+import fr.openium.testdrivingdistraction.model.Trip
 import fr.openium.testdrivingdistraction.repository.TripRepository
 
 /**
@@ -8,8 +9,12 @@ import fr.openium.testdrivingdistraction.repository.TripRepository
  */
 class ViewModelDetail(
     private val tripRepository: TripRepository
-) : ViewModel() {
+) : AbstractViewModel() {
 
     fun getSpecificTrip(beginDate: String) =
         tripRepository.getTrip(beginDate)
+
+    fun deleteTrip(trip: Trip) {
+        tripRepository.deleteTrip(trip)
+    }
 }

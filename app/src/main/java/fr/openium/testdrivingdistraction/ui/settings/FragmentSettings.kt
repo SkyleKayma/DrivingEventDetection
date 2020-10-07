@@ -1,5 +1,6 @@
 package fr.openium.testdrivingdistraction.ui.settings
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,11 +9,12 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.tbruyelle.rxpermissions3.RxPermissions
+import com.tbruyelle.rxpermissions2.RxPermissions
 import fr.openium.kotlintools.ext.*
 import fr.openium.testdrivingdistraction.R
 import fr.openium.testdrivingdistraction.base.fragment.AbstractFragment
 import fr.openium.testdrivingdistraction.utils.PermissionsUtils
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.android.ext.android.inject
 
@@ -82,7 +84,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
     private fun setListeners() {
         buttonSettingsPermissionsAskReadCallLog.setOnClickListener {
             RxPermissions(this)
-                .requestEach(android.Manifest.permission.READ_CALL_LOG)
+                .requestEach(Manifest.permission.READ_CALL_LOG)
                 .subscribe { permission ->
                     when {
                         permission.granted -> {
@@ -96,12 +98,12 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
                             goToSettings()
                         }
                     }
-                }
+                }.addTo(disposables)
         }
 
         buttonSettingsPermissionsAskReadPhoneState.setOnClickListener {
             RxPermissions(this)
-                .requestEach(android.Manifest.permission.READ_PHONE_STATE)
+                .requestEach(Manifest.permission.READ_PHONE_STATE)
                 .subscribe { permission ->
                     when {
                         permission.granted -> {
@@ -115,12 +117,12 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
                             goToSettings()
                         }
                     }
-                }
+                }.addTo(disposables)
         }
 
         buttonSettingsPermissionsAskReceiveSMS.setOnClickListener {
             RxPermissions(this)
-                .requestEach(android.Manifest.permission.RECEIVE_SMS)
+                .requestEach(Manifest.permission.RECEIVE_SMS)
                 .subscribe { permission ->
                     when {
                         permission.granted -> {
@@ -134,12 +136,12 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
                             goToSettings()
                         }
                     }
-                }
+                }.addTo(disposables)
         }
 
         buttonSettingsPermissionsAskLocation.setOnClickListener {
             RxPermissions(this)
-                .requestEach(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .requestEach(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe { permission ->
                     when {
                         permission.granted -> {
@@ -155,13 +157,13 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
                             goToSettings()
                         }
                     }
-                }
+                }.addTo(disposables)
         }
     }
 
     private fun askForBackgroundLocationPermission() {
         RxPermissions(this)
-            .requestEach(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            .requestEach(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             .subscribe { permission ->
                 when {
                     permission.granted -> {
@@ -175,7 +177,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
                         goToSettings()
                     }
                 }
-            }
+            }.addTo(disposables)
     }
 
     private fun goToSettings() {

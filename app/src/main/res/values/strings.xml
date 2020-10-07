@@ -4,8 +4,13 @@
     <!-- Generic -->
     <string name="generic_error_start_record_first">Please start record first</string>
     <string name="generic_date_full_format">yyyy-MM-dd\'T\'HH:mm:ss.SSSZ</string>
-    <string name="generic_date_full_text_format">\'Le\' dd-MM-yyyy \'à\' HH:mm:ss</string>
-    <string name="generic_date_short_text_format">dd-MM-yyyy \'à\' HH:mm:ss</string>
+    <string name="generic_date_full_text_format">\'Le\' dd-MM-yyyy \'at\' HH:mm:ss</string>
+    <string name="generic_date_short_text_format">dd-MM-yyyy \'at\' HH:mm:ss</string>
+    <string name="generic_date_only_date_text_format">EEEE dd MMMM yyyy</string>
+    <string name="generic_date_only_time_text_format">\'At\' HH\'h\'mm\'m\'ss\'s\'</string>
+    <string name="generic_action_chooser_title">What do you want to do ?</string>
+    <string name="generic_delete">Delete</string>
+    <string name="generic_cancel">Cancel</string>
 
     <!-- Home -->
     <string name="home_error_service_starting">Service is starting. Please wait</string>
@@ -27,7 +32,7 @@
     <string name="home_marker_pick_up">Marker\nPick up</string>
 
     <!-- Settings -->
-    <string name="settings_screen_title">Paramètres</string>
+    <string name="settings_screen_title">Parameters</string>
     <string name="settings_permission_read_call_log">READ_CALL_LOG</string>
     <string name="settings_permission_read_call_log_description">This permission allow us to …</string>
     <string name="settings_permission_read_phone_state">READ_PHONE_STATE</string>
@@ -41,14 +46,26 @@
     <string name="fake_events_screen_title">Fake Events</string>
     <string name="fake_events_fake_screen_state_toggle_on">Fake\nScreen Toggle\nON/OFF\n\n\nActual: ON</string>
     <string name="fake_events_fake_screen_state_toggle_off">Fake\nScreen Toggle\nON/OFF\n\n\nActual: OFF</string>
-    <string name="fake_events_fake_screen_toogle_unlock_lock_lock">Fake\nScreen Toogle Unlock/Lock\n\n\nActual: LOCK</string>
-    <string name="fake_events_fake_screen_toogle_unlock_lock_unlock">Fake\nScreen Toogle Unlock/Lock\n\n\nActual: UNLOCK</string>
+    <string name="fake_events_fake_screen_unlock">Fake\nScreen Unlock</string>
     <string name="fake_events_fake_call_received">Fake\nReceive\nCall</string>
     <string name="fake_events_fake_call_hooked">Fake\nHook\nCall</string>
     <string name="fake_events_fake_call_not_hooked">Fake\nNot Hook\nCall</string>
     <string name="fake_events_fake_call_sent">Fake\nSend\nCall</string>
     <string name="fake_events_fake_sms_received">Fake\nReceive\nSMS</string>
-    <string name="detail_item_start_date">Début:</string>
-    <string name="detail_item_end_date">Fin:</string>
-    <string name="detail_item_nb_events">Nombre d\'évènements enregistrés:</string>
+
+    <!-- Detail list -->
+    <string name="detail_list_screen_title">Records list</string>
+    <string name="detail_list_item_start_date">Start:</string>
+    <string name="detail_list_item_end_date">End:</string>
+    <string name="detail_list_item_nb_events">Events registered:</string>
+    <string name="detail_list_item_nb_markers_set">Markers set:</string>
+    <string name="detail_list_error_no_file_manager">No File Manager found</string>
+    <string name="detail_list_empty_message">No trip found</string>
+
+    <!-- Detail -->
+    <string name="detail_screen_title">Detail</string>
+    <string name="detail_events_title">Events:</string>
+    <string name="detail_markers_title">Markers:</string>
+    <string name="detail_delete_trip_confirm_message">Are you sure to delete this trip ?</string>
+
 </resources>
