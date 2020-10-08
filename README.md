@@ -9,23 +9,31 @@
 2. Possibilité d'importer et d'exporter les infos au format .json
 
 3. Captures:
+
 Home Not Recording
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/home_not_recording.jpg" width="200">
 
 Home Recording
-<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/home_recording.jpg" width="200">
+
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/hone_recording.jpg" width="200">
 
 Permissions
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/permissions.jpg" width="200">
 
 Settings
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/settings.jpg" width="200">
 
 List
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/list.jpg" width="200">
 
 Detail
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/detail.jpg" width="200">
 
 Detail With Info
+
 <img src="https://gitea.openium.fr/l.godart/driving-distraction/src/commit/286abf573c195853c327e87e244bef10b8e41dfe/captures/detail_with_info.jpg" width="200">
