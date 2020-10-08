@@ -111,6 +111,9 @@ dependencies {
     // --- Gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // Zip maker
+    implementation 'org.zeroturnaround:zt-zip:1.13'
+
     // --- Tests
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

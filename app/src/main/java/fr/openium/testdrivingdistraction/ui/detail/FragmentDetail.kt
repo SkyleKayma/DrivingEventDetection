@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.FileProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
@@ -18,7 +17,6 @@ import com.google.gson.Gson
 import fr.openium.kotlintools.ext.appCompatActivity
 import fr.openium.kotlintools.ext.dip
 import fr.openium.kotlintools.ext.getColorCompat
-import fr.openium.testdrivingdistraction.BuildConfig
 import fr.openium.testdrivingdistraction.R
 import fr.openium.testdrivingdistraction.base.fragment.AbstractFragment
 import fr.openium.testdrivingdistraction.model.Trip
@@ -28,11 +26,7 @@ import fr.openium.testdrivingdistraction.ui.detail.dialog.DialogTripDelete
 import fr.openium.testdrivingdistraction.utils.DateUtils
 import fr.openium.testdrivingdistraction.utils.ShareUtils
 import kotlinx.android.synthetic.main.fragment_detail.*
-import okio.buffer
-import okio.sink
 import org.koin.android.ext.android.inject
-import java.io.File
-import java.nio.charset.Charset
 
 
 class FragmentDetail : AbstractFragment(R.layout.fragment_detail) {
@@ -344,23 +338,12 @@ class FragmentDetail : AbstractFragment(R.layout.fragment_detail) {
     }
 
     private fun exportTrip() {
-        val fileName = getNameOfFile()
-
-        val data = getJsonData()
-
-        val budgetFile = File(shareUtils.getShareDir(), fileName)
-        budgetFile.sink().buffer().use { buffer ->
-            buffer.writeString(data, Charset.defaultCharset())
-            buffer.flush()
-        }
-
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/json"
-            val uri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", budgetFile)
-            putExtra(Intent.EXTRA_STREAM, uri)
-        }
-
-        startActivity(Intent.createChooser(intent, getString(R.string.generic_action_chooser_title)))
+        startActivity(
+            Intent.createChooser(
+                shareUtils.getExportSingleIntent(getNameOfFile(), getJsonData()),
+                getString(R.string.generic_action_chooser_title)
+            )
+        )
     }
 
     private fun getJsonData(): String =

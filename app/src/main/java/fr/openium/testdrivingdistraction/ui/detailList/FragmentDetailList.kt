@@ -66,6 +66,10 @@ class FragmentDetailList : AbstractFragment(R.layout.fragment_detail_list) {
                 importTrip()
                 true
             }
+            R.id.menu_detail_list_export -> {
+                exportTrips()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -118,6 +122,35 @@ class FragmentDetailList : AbstractFragment(R.layout.fragment_detail_list) {
             snackbar(getString(R.string.detail_list_error_no_file_manager), Snackbar.LENGTH_SHORT)
         }
     }
+
+    private fun exportTrips() {
+        startActivity(
+            Intent.createChooser(
+                shareUtils.getExportMultiIntent(getTripsData()),
+                getString(R.string.generic_action_chooser_title)
+            )
+        )
+    }
+
+    private fun getTripsData(): List<Pair<String, String>> {
+        val trips = model.getAllTrips()
+
+        val data = mutableListOf<Pair<String, String>>()
+
+        trips.forEach {
+            data.add(getNameOfFile(it) to getJsonData(it))
+        }
+
+        return data
+    }
+
+    private fun getJsonData(trip: Trip): String =
+        gson.toJson(trip)
+
+    private fun getNameOfFile(trip: Trip): String =
+        trip.let {
+            "Trip_${trip.beginDate}_${trip.endDate}.json"
+        }
 
     // --- Other Methods
     // ---------------------------------------------------

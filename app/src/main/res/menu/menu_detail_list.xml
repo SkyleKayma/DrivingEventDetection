@@ -7,4 +7,11 @@
         android:title=""
         app:iconTint="@color/colorWhite"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_detail_list_export"
+        android:icon="@drawable/ic_export"
+        android:title=""
+        app:iconTint="@color/colorWhite"
+        app:showAsAction="always" />
 </menu>

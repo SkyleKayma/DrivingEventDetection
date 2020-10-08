@@ -150,6 +150,11 @@ class TripRepository(private val dateUtils: DateUtils) {
         }
     }
 
+    fun getAllTrips(): MutableList<Trip> =
+        Realm.getDefaultInstance().use { realm ->
+            realm.copyFromRealm(realm.where(Trip::class.java).findAll())
+        }
+
     fun getAllTripsObs(realm: Realm): Flowable<MutableList<Trip>> =
         realm.where(Trip::class.java).findAll()
             .asFlowable()

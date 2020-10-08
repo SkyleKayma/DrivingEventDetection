@@ -15,6 +15,9 @@ class ViewModelDetailList(
     fun getAllTripsObs(): Flowable<MutableList<Trip>> =
         tripRepository.getAllTripsObs(realm)
 
+    fun getAllTrips(): MutableList<Trip> =
+        tripRepository.getAllTrips()
+
     fun insertNewTrip(trip: Trip) {
         tripRepository.insertNewTrip(trip)
     }
