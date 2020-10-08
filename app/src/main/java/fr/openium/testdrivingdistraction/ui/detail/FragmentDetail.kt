@@ -368,8 +368,8 @@ class FragmentDetail : AbstractFragment(R.layout.fragment_detail) {
 
     private fun getNameOfFile(): String =
         trip?.let {
-            "Trip_${trip?.beginDate}_${trip?.endDate}"
-        } ?: "Trip_UNKNOWN"
+            "Trip_${trip?.beginDate}_${trip?.endDate}.json"
+        } ?: "Trip_UNKNOWN.json"
 
     private fun showDeleteDialog() {
         DialogTripDelete().apply {

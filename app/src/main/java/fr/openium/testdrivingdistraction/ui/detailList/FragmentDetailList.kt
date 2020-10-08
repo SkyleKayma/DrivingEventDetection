@@ -109,7 +109,7 @@ class FragmentDetailList : AbstractFragment(R.layout.fragment_detail_list) {
 
     private fun importTrip() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "text/json"
+        intent.type = "application/json"
         intent.addCategory(Intent.CATEGORY_OPENABLE)
 
         try {
@@ -118,6 +118,9 @@ class FragmentDetailList : AbstractFragment(R.layout.fragment_detail_list) {
             snackbar(getString(R.string.detail_list_error_no_file_manager), Snackbar.LENGTH_SHORT)
         }
     }
+
+    // --- Other Methods
+    // ---------------------------------------------------
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

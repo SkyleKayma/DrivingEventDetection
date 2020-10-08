@@ -172,6 +172,9 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
     private fun isRecording() =
         model.isRecording()
 
+    // --- Other Methods
+    // ---------------------------------------------------
+
     companion object {
         private const val TAG = "FragmentSettings"
     }
