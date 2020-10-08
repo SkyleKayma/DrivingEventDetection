@@ -15,5 +15,5 @@
 ![Permissions](captures/permissions.png)
 ![Settings](captures/settings.png)
 ![List](captures/list.png)
-![Detail](captures/detail.png)
+![Detail](https://gitea.openium.fr/l.godart/driving-distraction/raw/commit/f04083e36dc0c588614c91f622f2d55d30885e65/captures/detail.jpg)
 ![Detail With Info](captures/detail_with_info.png)
