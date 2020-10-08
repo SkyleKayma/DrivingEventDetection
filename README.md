@@ -36,4 +36,4 @@ Detail
 
 Detail With Info
 
-<img src="https://gitea.openium.fr/l.godart/driving-distraction/src/commit/286abf573c195853c327e87e244bef10b8e41dfe/captures/detail_with_info.jpg" width="200">
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/detail_with_info.jpg" width="200">
