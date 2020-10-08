@@ -16,3 +16,4 @@
 ![Settings](captures/settings.png)
 ![List](captures/list.png)
 ![Detail](captures/detail.png)
+![Detail With Info](captures/detail_with_info.png)
