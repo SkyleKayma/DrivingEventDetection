@@ -7,4 +7,11 @@
         android:title=""
         app:iconTint="@color/colorWhite"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_home_settings"
+        android:icon="@drawable/ic_settings"
+        android:title=""
+        app:iconTint="@color/colorWhite"
+        app:showAsAction="always" />
 </menu>

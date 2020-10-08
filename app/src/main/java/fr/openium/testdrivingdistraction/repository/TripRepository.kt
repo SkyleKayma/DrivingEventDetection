@@ -92,9 +92,10 @@ class TripRepository(private val dateUtils: DateUtils) {
     }
 
     private fun getLastKnownLocation(): TripLocation? =
-        Realm.getDefaultInstance().use { realm ->
-            getCurrentRecordingTrip()?.locations?.lastOrNull()
-        }
+        getCurrentRecordingTrip()?.locations?.lastOrNull()
+
+    fun hasRecordedSomeLocations(): Boolean =
+        getLastKnownLocation() != null
 
     // Accelerometer
 

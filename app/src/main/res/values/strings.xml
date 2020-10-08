@@ -10,37 +10,34 @@
     <string name="generic_date_only_time_text_format">\'At\' HH\'h\'mm\'m\'ss\'s\'</string>
     <string name="generic_action_chooser_title">What do you want to do ?</string>
     <string name="generic_delete">Delete</string>
+    <string name="generic_continue">Continue</string>
     <string name="generic_cancel">Cancel</string>
 
     <!-- Home -->
     <string name="home_error_service_starting">Service is starting. Please wait</string>
     <string name="home_error_service_stopping">Service is stopping. Please wait</string>
-
     <string name="home_trip_start_recording">Start Record</string>
     <string name="home_trip_starting_recording">Starting Record</string>
     <string name="home_trip_stop_recording">Stop Record</string>
     <string name="home_trip_stopping_recording">Stopping Recording</string>
-
     <string name="home_permissions_missing">Missing permissions.\nEvents may not be correctly reported.</string>
     <string name="home_permissions_granted">All permissions have been granted</string>
-
     <string name="home_add_some_fake_events">Add some fake events</string>
-
     <string name="home_add_some_markers">Add some markers:</string>
     <string name="home_marker_hang_up">Marker\nHang up</string>
     <string name="home_marker_hand_usage">Marker\nHand\nUsage</string>
     <string name="home_marker_pick_up">Marker\nPick up</string>
 
-    <!-- Settings -->
-    <string name="settings_screen_title">Parameters</string>
-    <string name="settings_permission_read_call_log">READ_CALL_LOG</string>
-    <string name="settings_permission_read_call_log_description">This permission allow us to …</string>
-    <string name="settings_permission_read_phone_state">READ_PHONE_STATE</string>
-    <string name="settings_permission_read_phone_description">This permission allow us to …</string>
-    <string name="settings_permission_receive_sms">RECEIVE_SMS</string>
-    <string name="settings_permission_receive_sms_description">This permission allow us to know when user receive an SMS</string>
-    <string name="settings_permission_location">ACCESS_FINE_LOCATION\nACCESS_BACKGROUND_LOCATION</string>
-    <string name="settings_permission_location_description">This permission allow us to receive user location</string>
+    <!-- Permissions -->
+    <string name="permissions_screen_title">Permissions</string>
+    <string name="permissions_read_call_log">READ_CALL_LOG</string>
+    <string name="permissions_read_call_log_description">This permission allow us to …</string>
+    <string name="permissions_read_phone_state">READ_PHONE_STATE</string>
+    <string name="permissions_read_phone_description">This permission allow us to …</string>
+    <string name="permissions_receive_sms">RECEIVE_SMS</string>
+    <string name="permissions_receive_sms_description">This permission allow us to know when user receive an SMS</string>
+    <string name="permissions_location">ACCESS_FINE_LOCATION\nACCESS_BACKGROUND_LOCATION</string>
+    <string name="permissions_location_description">This permission allow us to receive user location</string>
 
     <!-- Fake events -->
     <string name="fake_events_screen_title">Fake Events</string>
@@ -67,5 +64,22 @@
     <string name="detail_events_title">Events:</string>
     <string name="detail_markers_title">Markers:</string>
     <string name="detail_delete_trip_confirm_message">Are you sure to delete this trip ?</string>
+
+    <!-- Settings -->
+    <string name="settings_screen_title">Parameters</string>
+    <string name="settings_warning_recording">You can\'t modify any of these parameters when recording.</string>
+    <string name="settings_speed_accelerometer">Speed of accelerometer:</string>
+    <string name="settings_speed_gyroscope">Speed of gyroscope:</string>
+    <string name="settings_speed_normal_rate">(200ms-220ms)</string>
+    <string name="settings_speed_ui_rate">(60ms-80ms)</string>
+    <string name="settings_speed_game_rate">(20ms-40ms)</string>
+    <string name="settings_speed_fastest_rate">(0ms-20ms)</string>
+    <string name="settings_rate_explanation_warning">Select what you think is the most appropriate for testing. The faster it is, the faster the battery will drain.</string>
+    <string name="settings_enable_disable_feature_title">What info do you want to get ?</string>
+    <string name="settings_enable_accelerometer">Accelerometer:</string>
+    <string name="settings_enable_gyroscope">Gyroscope:</string>
+    <string name="settings_enable_location">Location:</string>
+    <string name="settings_enable_events">Events:</string>
+    <string name="settings_fake_events_explanation">Fake events and markers will continue to be recorded even if you disabled it.</string>
 
 </resources>

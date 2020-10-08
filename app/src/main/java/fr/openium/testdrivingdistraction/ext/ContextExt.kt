@@ -1,9 +1,11 @@
 package fr.openium.testdrivingdistraction.ext
 
+import android.app.ActivityManager
 import android.content.Context
-import android.content.res.ColorStateList
-import fr.openium.kotlintools.ext.getColorCompat
+import android.content.Context.ACTIVITY_SERVICE
 
-
-fun Context.getColorStateListFromColor(colorId: Int) =
-    ColorStateList.valueOf(this.getColorCompat(colorId))
+@Suppress("DEPRECATION") // Deprecated for third party Services.
+fun <T> Context.isServiceRunning(service: Class<T>) =
+    (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
+        .getRunningServices(Integer.MAX_VALUE)
+        .any { it.service.className == service.name }

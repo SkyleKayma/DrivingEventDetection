@@ -11,12 +11,6 @@ class ViewModelHome(
     private val tripRepository: TripRepository
 ) : AbstractViewModel() {
 
-    fun startTripRecording() =
-        tripRepository.startTripRecording()
-
-    fun stopTripRecording() =
-        tripRepository.stopTripRecording()
-
     fun isRecording(): Boolean =
         tripRepository.isRecording()
 
@@ -28,4 +22,7 @@ class ViewModelHome(
 
     fun addSensorPickUpEvent() =
         tripRepository.addSensorEvent(TripSensorEvent.Type.PICK_UP)
+
+    fun hasRecordedSomeLocations(): Boolean =
+        tripRepository.hasRecordedSomeLocations()
 }

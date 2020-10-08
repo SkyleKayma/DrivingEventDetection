@@ -20,10 +20,13 @@ import fr.openium.rxtools.ext.fromIOToMain
 import fr.openium.testdrivingdistraction.R
 import fr.openium.testdrivingdistraction.base.fragment.AbstractFragment
 import fr.openium.testdrivingdistraction.ext.getColorStateListFromColor
+import fr.openium.testdrivingdistraction.ext.isServiceRunning
 import fr.openium.testdrivingdistraction.ext.navigate
 import fr.openium.testdrivingdistraction.service.SensorAndLocationTrackingService
+import fr.openium.testdrivingdistraction.ui.home.dialog.DialogNoLocationPermission
 import fr.openium.testdrivingdistraction.utils.PermissionsUtils
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.ext.android.inject
@@ -38,6 +41,9 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
     private val permissionsUtils by inject<PermissionsUtils>()
     private val model: ViewModelHome by viewModel()
 
+    private var startServiceTimer: Disposable? = null
+    private var stopServiceTimer: Disposable? = null
+
     // --- Life cycle
     // ---------------------------------------------------
 
@@ -48,7 +54,6 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setToolbar()
         setDisplay()
         setListeners()
@@ -64,6 +69,10 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
                 navigate(FragmentHomeDirections.actionFragmentHomeToFragmentDetailList())
                 true
             }
+            R.id.menu_home_settings -> {
+                navigate(FragmentHomeDirections.actionFragmentHomeToFragmentSettings())
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -72,7 +81,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         setPermissionState()
     }
 
-    // --- Methods
+    // --- Display methods
     // ---------------------------------------------------
 
     private fun setToolbar() {
@@ -141,50 +150,26 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         }
     }
 
+    // --- Job methods
+    // ---------------------------------------------------
+
     private fun setListeners() {
         buttonHomeStartTrip.setOnClickListener {
-            when (actualRecordState) {
-                RecordingState.STARTED -> {
-                    model.stopTripRecording()
-                    stopService()
-                    actualRecordState = RecordingState.STOPPING
-                    setDisplay()
-
-                    Observable.timer(1500L, TimeUnit.MILLISECONDS)
-                        .fromIOToMain()
-                        .subscribe({
-                            actualRecordState = RecordingState.STOPPED
-                            setDisplay()
-                        }, {
-                            Log.e(null, "Error waiting for service to stop")
-                        }).addTo(disposables)
-                }
-                RecordingState.STARTING -> {
-                    snackbar(getString(R.string.home_error_service_starting), Snackbar.LENGTH_SHORT)
-                }
-                RecordingState.STOPPING -> {
-                    snackbar(getString(R.string.home_error_service_stopping), Snackbar.LENGTH_SHORT)
-                }
-                RecordingState.STOPPED -> {
-                    model.startTripRecording()
-                    startService()
-                    actualRecordState = RecordingState.STARTING
-                    setDisplay()
-
-                    Observable.timer(1500L, TimeUnit.MILLISECONDS)
-                        .fromIOToMain()
-                        .subscribe({
-                            actualRecordState = RecordingState.STARTED
-                            setDisplay()
-                        }, {
-                            Log.e(null, "Error waiting for service to start")
-                        }).addTo(disposables)
-                }
+            if ((!permissionsUtils.isLocationPermissionGranted() || !permissionsUtils.isBackgroundLocationPermissionGranted()) && !isRecording()) {
+                DialogNoLocationPermission().apply {
+                    setListener(object : DialogNoLocationPermission.OnPositiveButtonClickedListener {
+                        override fun onPositiveButtonClicked() {
+                            changeRecordState()
+                        }
+                    })
+                }.show(childFragmentManager, "DialogNoLocationPermission")
+            } else {
+                changeRecordState()
             }
         }
 
         textViewHomePermissions.setOnClickListener {
-            navigate(FragmentHomeDirections.actionFragmentHomeToFragmentSettings())
+            navigate(FragmentHomeDirections.actionFragmentHomeToFragmentPermissions())
         }
 
         buttonHomeAddFakeEvents.setOnClickListener {
@@ -212,6 +197,69 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         }
     }
 
+    private fun changeRecordState() {
+        when (actualRecordState) {
+            RecordingState.STARTED -> {
+                actualRecordState = RecordingState.STOPPING
+
+                stopService()
+                setDisplay()
+
+                setStopServiceTimer()
+            }
+            RecordingState.STARTING -> {
+                snackbar(getString(R.string.home_error_service_starting), Snackbar.LENGTH_SHORT)
+            }
+            RecordingState.STOPPING -> {
+                snackbar(getString(R.string.home_error_service_stopping), Snackbar.LENGTH_SHORT)
+            }
+            RecordingState.STOPPED -> {
+                actualRecordState = RecordingState.STARTING
+
+                startService()
+                setDisplay()
+
+                setStartServiceTimer()
+            }
+        }
+    }
+
+    private fun setStartServiceTimer() {
+        startServiceTimer?.dispose()
+        startServiceTimer = null
+
+        startServiceTimer = Observable.timer(100, TimeUnit.MILLISECONDS)
+            .fromIOToMain()
+            .subscribe({
+                if (requireContext().isServiceRunning(SensorAndLocationTrackingService::class.java) && isRecording()) {
+                    if (model.hasRecordedSomeLocations()) {
+                        actualRecordState = RecordingState.STARTED
+                        setDisplay()
+                    } else setStartServiceTimer()
+                } else setStartServiceTimer()
+            }, { Log.e(TAG, "Error waiting for service to start") }).addTo(disposables)
+    }
+
+    private fun setStopServiceTimer() {
+        stopServiceTimer?.dispose()
+        stopServiceTimer = null
+
+        stopServiceTimer = Observable.timer(100, TimeUnit.MILLISECONDS)
+            .fromIOToMain()
+            .subscribe({
+                if (!requireContext().isServiceRunning(SensorAndLocationTrackingService::class.java) && !isRecording()) {
+                    actualRecordState = RecordingState.STOPPED
+                    setDisplay()
+                } else setStopServiceTimer()
+            }, { Log.e(TAG, "Error waiting for service to stop") }).addTo(disposables)
+    }
+
+    private fun isRecording(): Boolean =
+        model.isRecording()
+
+    // --- Service related methods
+    // ---------------------------------------------------
+
     private fun startService() {
         val serviceIntent = Intent(requireContext(), SensorAndLocationTrackingService::class.java)
         ContextCompat.startForegroundService(requireContext(), serviceIntent)
@@ -222,9 +270,6 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         activity?.stopService(serviceIntent)
     }
 
-    private fun isRecording(): Boolean =
-        model.isRecording()
-
     // --- Other methods
     // ---------------------------------------------------
 
@@ -233,5 +278,9 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         STARTED,
         STOPPING,
         STOPPED
+    }
+
+    companion object {
+        private const val TAG = "FragmentHome"
     }
 }

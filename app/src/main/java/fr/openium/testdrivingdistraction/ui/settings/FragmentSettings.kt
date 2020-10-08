@@ -1,27 +1,31 @@
 package fr.openium.testdrivingdistraction.ui.settings
 
-import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.tbruyelle.rxpermissions2.RxPermissions
-import fr.openium.kotlintools.ext.*
+import com.jakewharton.rxbinding3.widget.checkedChanges
+import fr.openium.kotlintools.ext.appCompatActivity
+import fr.openium.kotlintools.ext.gone
+import fr.openium.kotlintools.ext.show
 import fr.openium.testdrivingdistraction.R
 import fr.openium.testdrivingdistraction.base.fragment.AbstractFragment
-import fr.openium.testdrivingdistraction.utils.PermissionsUtils
+import fr.openium.testdrivingdistraction.enum.SensorRate
+import fr.openium.testdrivingdistraction.utils.PreferencesUtils
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
 
-    private val permissionsUtils by inject<PermissionsUtils>()
+    private val model: ViewModelSettings by viewModel()
+    private val preferencesUtils: PreferencesUtils by inject()
 
     // --- Life cycle
     // ---------------------------------------------------
@@ -38,6 +42,30 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
         setDisplay()
     }
 
+    private fun setDisplay() {
+        if (isRecording()) {
+            textViewSettingsWarningRecording.show()
+
+            spinnerSettingsAccelerometerRate.isEnabled = false
+            spinnerSettingsGyroscopeRate.isEnabled = false
+
+            switchEnabledAccelerometerRecording.isEnabled = false
+            switchEnabledGyroscopeRecording.isEnabled = false
+            switchEnabledLocationRecording.isEnabled = false
+            switchEnabledEventsRecording.isEnabled = false
+        } else {
+            textViewSettingsWarningRecording.gone()
+
+            spinnerSettingsAccelerometerRate.isEnabled = true
+            spinnerSettingsGyroscopeRate.isEnabled = true
+
+            switchEnabledAccelerometerRecording.isEnabled = true
+            switchEnabledGyroscopeRecording.isEnabled = true
+            switchEnabledLocationRecording.isEnabled = true
+            switchEnabledEventsRecording.isEnabled = true
+        }
+    }
+
     // --- Methods
     // ---------------------------------------------------
 
@@ -47,147 +75,104 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
         NavigationUI.setupWithNavController(toolbar, findNavController())
     }
 
-    private fun setDisplay() {
-        if (permissionsUtils.isReadCallLogPermissionGranted()) {
-            buttonSettingsPermissionsAskReadCallLog.hide()
-            imageViewSettingsPermissionsReadCallLog.show()
-        } else {
-            imageViewSettingsPermissionsReadCallLog.hide()
-            buttonSettingsPermissionsAskReadCallLog.show()
-        }
-
-        if (permissionsUtils.isReadPhoneStatePermissionGranted()) {
-            buttonSettingsPermissionsAskReadPhoneState.hide()
-            imageViewSettingsPermissionsReadPhoneState.show()
-        } else {
-            imageViewSettingsPermissionsReadPhoneState.hide()
-            buttonSettingsPermissionsAskReadPhoneState.show()
-        }
-
-        if (permissionsUtils.isReceiveSMSPermissionGranted()) {
-            buttonSettingsPermissionsAskReceiveSMS.hide()
-            imageViewSettingsPermissionsReceiveSMS.show()
-        } else {
-            imageViewSettingsPermissionsReceiveSMS.hide()
-            buttonSettingsPermissionsAskReceiveSMS.show()
-        }
-
-        if (permissionsUtils.isLocationPermissionGranted() && permissionsUtils.isBackgroundLocationPermissionGranted()) {
-            buttonSettingsPermissionsAskLocation.hide()
-            imageViewSettingsPermissionsLocation.show()
-        } else {
-            imageViewSettingsPermissionsLocation.hide()
-            buttonSettingsPermissionsAskLocation.show()
-        }
-    }
-
     private fun setListeners() {
-        buttonSettingsPermissionsAskReadCallLog.setOnClickListener {
-            RxPermissions(this)
-                .requestEach(Manifest.permission.READ_CALL_LOG)
-                .subscribe { permission ->
-                    when {
-                        permission.granted -> {
-                            buttonSettingsPermissionsAskReadCallLog.hideWithAnimationCompat()
-                            imageViewSettingsPermissionsReadCallLog.showWithAnimationCompat()
-                        }
-                        permission.shouldShowRequestPermissionRationale -> {
-                            // Nothing special to do, permission will be asked again
-                        }
-                        else -> {
-                            goToSettings()
-                        }
-                    }
-                }.addTo(disposables)
-        }
-
-        buttonSettingsPermissionsAskReadPhoneState.setOnClickListener {
-            RxPermissions(this)
-                .requestEach(Manifest.permission.READ_PHONE_STATE)
-                .subscribe { permission ->
-                    when {
-                        permission.granted -> {
-                            buttonSettingsPermissionsAskReadPhoneState.hideWithAnimationCompat()
-                            imageViewSettingsPermissionsReadPhoneState.showWithAnimationCompat()
-                        }
-                        permission.shouldShowRequestPermissionRationale -> {
-                            // Nothing special to do, permission will be asked again
-                        }
-                        else -> {
-                            goToSettings()
-                        }
-                    }
-                }.addTo(disposables)
-        }
-
-        buttonSettingsPermissionsAskReceiveSMS.setOnClickListener {
-            RxPermissions(this)
-                .requestEach(Manifest.permission.RECEIVE_SMS)
-                .subscribe { permission ->
-                    when {
-                        permission.granted -> {
-                            buttonSettingsPermissionsAskReceiveSMS.hideWithAnimationCompat()
-                            imageViewSettingsPermissionsReceiveSMS.showWithAnimationCompat()
-                        }
-                        permission.shouldShowRequestPermissionRationale -> {
-                            // Nothing special to do, permission will be asked again
-                        }
-                        else -> {
-                            goToSettings()
-                        }
-                    }
-                }.addTo(disposables)
-        }
-
-        buttonSettingsPermissionsAskLocation.setOnClickListener {
-            RxPermissions(this)
-                .requestEach(Manifest.permission.ACCESS_FINE_LOCATION)
-                .subscribe { permission ->
-                    when {
-                        permission.granted -> {
-                            if (permissionsUtils.isBackgroundLocationPermissionGranted()) {
-                                buttonSettingsPermissionsAskLocation.hideWithAnimationCompat()
-                                imageViewSettingsPermissionsLocation.showWithAnimationCompat()
-                            } else askForBackgroundLocationPermission()
-                        }
-                        permission.shouldShowRequestPermissionRationale -> {
-                            // Nothing special to do, permission will be asked again
-                        }
-                        else -> {
-                            goToSettings()
-                        }
-                    }
-                }.addTo(disposables)
-        }
+        setSpinnerAccelerometer()
+        setSpinnerGyroscope()
+        setSwitchAccelerometer()
+        setSwitchGyroscope()
+        setSwitchLocation()
+        setSwitchEvents()
     }
 
-    private fun askForBackgroundLocationPermission() {
-        RxPermissions(this)
-            .requestEach(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-            .subscribe { permission ->
-                when {
-                    permission.granted -> {
-                        buttonSettingsPermissionsAskLocation.hideWithAnimationCompat()
-                        imageViewSettingsPermissionsLocation.showWithAnimationCompat()
-                    }
-                    permission.shouldShowRequestPermissionRationale -> {
-                        // Nothing special to do, permission will be asked again
-                    }
-                    else -> {
-                        goToSettings()
-                    }
+    private fun setSpinnerAccelerometer() {
+        val adapterAccelerometer = object : ArrayAdapter<String>(
+            requireContext(), R.layout.spinner_item_sort, getSpinnerItemList()
+        ) {}
+
+        adapterAccelerometer.setDropDownViewResource(R.layout.spinner_item_dropdown_sort)
+
+        spinnerSettingsAccelerometerRate.adapter = adapterAccelerometer
+        spinnerSettingsAccelerometerRate.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    preferencesUtils.sensorAccelerometerRate = position
                 }
-            }.addTo(disposables)
+            }
+
+        spinnerSettingsAccelerometerRate.setSelection(preferencesUtils.sensorAccelerometerRate)
     }
 
-    private fun goToSettings() {
-        requireActivity().startActivity(
-            Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.parse("package:" + requireActivity().packageName)
-            ).apply {
-                addCategory(Intent.CATEGORY_DEFAULT)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            })
+    private fun setSpinnerGyroscope() {
+        val adapterGyroscope = object : ArrayAdapter<String>(
+            requireContext(), R.layout.spinner_item_sort, getSpinnerItemList()
+        ) {}
+
+        adapterGyroscope.setDropDownViewResource(R.layout.spinner_item_dropdown_sort)
+
+        spinnerSettingsGyroscopeRate.adapter = adapterGyroscope
+        spinnerSettingsGyroscopeRate.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    preferencesUtils.sensorGyroscopeRate = position
+                }
+            }
+
+        spinnerSettingsGyroscopeRate.setSelection(preferencesUtils.sensorGyroscopeRate)
+    }
+
+    fun getSpinnerItemList(): List<String> =
+        SensorRate.values().map {
+            "${it.name.toLowerCase().capitalize()} ${getString(it.rateTextId)}"
+        }
+
+    private fun setSwitchAccelerometer() {
+        switchEnabledAccelerometerRecording.isChecked = preferencesUtils.accelerometerRecordEnabled
+        switchEnabledAccelerometerRecording.checkedChanges()
+            .subscribe({
+                preferencesUtils.accelerometerRecordEnabled = it
+            }, {
+                Log.e(TAG, "Error checking accelerometer switch")
+            }).addTo(disposables)
+    }
+
+    private fun setSwitchGyroscope() {
+        switchEnabledGyroscopeRecording.isChecked = preferencesUtils.gyroscopeRecordEnabled
+        switchEnabledGyroscopeRecording.checkedChanges()
+            .subscribe({
+                preferencesUtils.gyroscopeRecordEnabled = it
+            }, {
+                Log.e(TAG, "Error checking gyroscope switch")
+            }).addTo(disposables)
+    }
+
+    private fun setSwitchLocation() {
+        switchEnabledLocationRecording.isChecked = preferencesUtils.locationRecordEnabled
+        switchEnabledLocationRecording.checkedChanges()
+            .subscribe({
+                preferencesUtils.locationRecordEnabled = it
+            }, {
+                Log.e(TAG, "Error checking location switch")
+            }).addTo(disposables)
+    }
+
+    private fun setSwitchEvents() {
+        switchEnabledEventsRecording.isChecked = preferencesUtils.eventsRecordEnabled
+        switchEnabledEventsRecording.checkedChanges()
+            .subscribe({
+                preferencesUtils.eventsRecordEnabled = it
+            }, {
+                Log.e(TAG, "Error checking events switch")
+            }).addTo(disposables)
+    }
+
+    private fun isRecording() =
+        model.isRecording()
+
+    companion object {
+        private const val TAG = "FragmentSettings"
     }
 }

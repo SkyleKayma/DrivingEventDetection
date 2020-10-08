@@ -19,15 +19,20 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import fr.openium.testdrivingdistraction.R
+import fr.openium.testdrivingdistraction.enum.SensorRate
 import fr.openium.testdrivingdistraction.model.TripEvent
 import fr.openium.testdrivingdistraction.repository.TripRepository
 import fr.openium.testdrivingdistraction.ui.home.FragmentHome
+import fr.openium.testdrivingdistraction.utils.PermissionsUtils
+import fr.openium.testdrivingdistraction.utils.PreferencesUtils
 import org.koin.android.ext.android.inject
 
 
 class SensorAndLocationTrackingService : Service(), LocationListener {
 
     private val tripRepository: TripRepository by inject()
+    private val permissionsUtils: PermissionsUtils by inject()
+    private val preferencesUtils: PreferencesUtils by inject()
 
     private lateinit var locationManager: LocationManager
     private lateinit var sensorManager: SensorManager
@@ -35,27 +40,32 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
     private var lastPhoneState: String? = TelephonyManager.EXTRA_STATE_IDLE
 
     // Sensor Listeners
-    private var accelerometerListener: SensorEventListener? = object : SensorEventListener {
+
+    private var accelerometerListener: SensorEventListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
         override fun onSensorChanged(sensorEvent: SensorEvent) {
-            val x = sensorEvent.values[0]
-            val y = sensorEvent.values[1]
-            val z = sensorEvent.values[2]
-            tripRepository.addAccelerometerValue(x, y, z)
+            if (canTrackData()) {
+                val x = sensorEvent.values[0]
+                val y = sensorEvent.values[1]
+                val z = sensorEvent.values[2]
+                tripRepository.addAccelerometerValue(x, y, z)
 
-            Log.d(TAG, "New accelerometer values received x = $x y = $y z = $z")
+//                Log.d(TAG, "New accelerometer values received x = $x y = $y z = $z")
+            }
         }
     }
 
-    private var gyroscopeListener: SensorEventListener? = object : SensorEventListener {
+    private var gyroscopeListener: SensorEventListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
         override fun onSensorChanged(sensorEvent: SensorEvent) {
-            val x = sensorEvent.values[0]
-            val y = sensorEvent.values[1]
-            val z = sensorEvent.values[2]
-            tripRepository.addGyroscopeValue(x, y, z)
+            if (canTrackData()) {
+                val x = sensorEvent.values[0]
+                val y = sensorEvent.values[1]
+                val z = sensorEvent.values[2]
+                tripRepository.addGyroscopeValue(x, y, z)
 
-            Log.d(TAG, "New gyroscope values received x = $x y = $y z = $z")
+//                Log.d(TAG, "New gyroscope values received x = $x y = $y z = $z")
+            }
         }
     }
 
@@ -63,49 +73,57 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
     private val phoneStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
+            if (canTrackData()) {
+                val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
 
-            Log.d("TEST", "state $state | lastPhoneState $lastPhoneState")
+                if (lastPhoneState == TelephonyManager.EXTRA_STATE_IDLE && state == TelephonyManager.EXTRA_STATE_RINGING) {
+                    // A new call just arrived
+                    tripRepository.addEvent(TripEvent.Type.RECEIVE_CALL)
+                } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_RINGING && state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
+                    // I just accepted a call
+                    tripRepository.addEvent(TripEvent.Type.HOOK_CALL)
+                } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_RINGING && state == TelephonyManager.EXTRA_STATE_IDLE) {
+                    // I just canceled a call
+                    tripRepository.addEvent(TripEvent.Type.NOT_HOOK_CALL)
+                } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_IDLE && state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
+                    // I just started my call
+                    tripRepository.addEvent(TripEvent.Type.SEND_CALL)
+                }
 
-            if (lastPhoneState == TelephonyManager.EXTRA_STATE_IDLE && state == TelephonyManager.EXTRA_STATE_RINGING) {
-                // A new call just arrived
-                tripRepository.addEvent(TripEvent.Type.RECEIVE_CALL)
-            } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_RINGING && state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                // I just accepted a call
-                tripRepository.addEvent(TripEvent.Type.HOOK_CALL)
-            } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_RINGING && state == TelephonyManager.EXTRA_STATE_IDLE) {
-                // I just canceled a call
-                tripRepository.addEvent(TripEvent.Type.NOT_HOOK_CALL)
-            } else if (lastPhoneState == TelephonyManager.EXTRA_STATE_IDLE && state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                // I just started my call
-                tripRepository.addEvent(TripEvent.Type.SEND_CALL)
+                lastPhoneState = state
             }
-
-            lastPhoneState = state
         }
     }
 
     private val smsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            tripRepository.addEvent(TripEvent.Type.RECEIVE_SMS)
+            if (canTrackData()) {
+                tripRepository.addEvent(TripEvent.Type.RECEIVE_SMS)
+            }
         }
     }
 
     private val screenOnReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            tripRepository.addEvent(TripEvent.Type.SCREEN_ON)
+            if (canTrackData()) {
+                tripRepository.addEvent(TripEvent.Type.SCREEN_ON)
+            }
         }
     }
 
     private val screenOffReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            tripRepository.addEvent(TripEvent.Type.SCREEN_OFF)
+            if (canTrackData()) {
+                tripRepository.addEvent(TripEvent.Type.SCREEN_OFF)
+            }
         }
     }
 
     private val unlockReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            tripRepository.addEvent(TripEvent.Type.SCREEN_UNLOCK)
+            if (canTrackData()) {
+                tripRepository.addEvent(TripEvent.Type.SCREEN_UNLOCK)
+            }
         }
     }
 
@@ -114,7 +132,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         startForeground(1, getNotification())
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? =
@@ -132,25 +150,37 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         registerGyroscopeListener()
 
         // Add broadcast event listeners
-        applicationContext.registerReceiver(phoneStateReceiver, IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED))
-        applicationContext.registerReceiver(smsReceiver, IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION))
-        applicationContext.registerReceiver(screenOnReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
-        applicationContext.registerReceiver(screenOffReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-        applicationContext.registerReceiver(unlockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+        if (preferencesUtils.eventsRecordEnabled) {
+            applicationContext.registerReceiver(phoneStateReceiver, IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED))
+            applicationContext.registerReceiver(smsReceiver, IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION))
+            applicationContext.registerReceiver(screenOnReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
+            applicationContext.registerReceiver(screenOffReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+            applicationContext.registerReceiver(unlockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+        }
+
+        // Start record
+        tripRepository.startTripRecording()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        applicationContext.unregisterReceiver(phoneStateReceiver)
-        applicationContext.unregisterReceiver(smsReceiver)
-        applicationContext.unregisterReceiver(screenOnReceiver)
-        applicationContext.unregisterReceiver(screenOffReceiver)
-        applicationContext.unregisterReceiver(unlockReceiver)
-
+        // Remove sensor listeners
         unregisterLocationListener()
         unregisterAccelerometerListener()
         unregisterGyroscopeListener()
+
+        // Remove broadcast event listeners
+        if (preferencesUtils.eventsRecordEnabled) {
+            applicationContext.unregisterReceiver(phoneStateReceiver)
+            applicationContext.unregisterReceiver(smsReceiver)
+            applicationContext.unregisterReceiver(screenOnReceiver)
+            applicationContext.unregisterReceiver(screenOffReceiver)
+            applicationContext.unregisterReceiver(unlockReceiver)
+        }
+
+        // Stop record
+        tripRepository.stopTripRecording()
     }
 
     // --- Methods
@@ -158,12 +188,14 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
     private fun registerLocationListener() {
         try {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                MILLISECONDS_INTERVAL,
-                METERS_DISTANCE,
-                this
-            )
+            if (preferencesUtils.locationRecordEnabled) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    MILLISECONDS_INTERVAL,
+                    METERS_DISTANCE,
+                    this
+                )
+            }
         } catch (e: SecurityException) {
             Log.e(TAG, "No permission given", e)
         } catch (e: IllegalArgumentException) {
@@ -173,37 +205,47 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
     private fun unregisterLocationListener() {
         try {
-            locationManager.removeUpdates(this)
+            if (preferencesUtils.locationRecordEnabled) {
+                locationManager.removeUpdates(this)
+            }
         } catch (e: Exception) {
             Log.w(TAG, "Failed to remove location listeners")
         }
     }
 
     private fun registerAccelerometerListener() {
-        sensorManager.registerListener(
-            accelerometerListener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
+        if (preferencesUtils.accelerometerRecordEnabled) {
+            sensorManager.registerListener(
+                accelerometerListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorRate.values().first { it.ordinal == preferencesUtils.sensorAccelerometerRate }.getRealSensorRate()
+            )
+
+//        Log.d(TAG, "Accelerometer rate used ${SensorRate.values().first { it.ordinal == preferencesUtils.sensorAccelerometerRate }}")
+        }
     }
 
     private fun unregisterAccelerometerListener() {
-        accelerometerListener?.let {
-            sensorManager.unregisterListener(it)
+        if (preferencesUtils.accelerometerRecordEnabled) {
+            sensorManager.unregisterListener(accelerometerListener)
         }
     }
 
     private fun registerGyroscopeListener() {
-        sensorManager.registerListener(
-            gyroscopeListener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
+        if (preferencesUtils.gyroscopeRecordEnabled) {
+            sensorManager.registerListener(
+                gyroscopeListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                SensorRate.values().first { it.ordinal == preferencesUtils.sensorGyroscopeRate }.getRealSensorRate()
+            )
+
+//        Log.d(TAG, "Gyroscope rate used ${SensorRate.values().first { it.ordinal == preferencesUtils.sensorGyroscopeRate }}")
+        }
     }
 
     private fun unregisterGyroscopeListener() {
-        gyroscopeListener?.let {
-            sensorManager.unregisterListener(it)
+        if (preferencesUtils.gyroscopeRecordEnabled) {
+            sensorManager.unregisterListener(gyroscopeListener)
         }
     }
 
@@ -235,12 +277,17 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         }
     }
 
+    private fun canTrackData(): Boolean =
+        if (permissionsUtils.isLocationPermissionGranted() && permissionsUtils.isBackgroundLocationPermissionGranted()) {
+            tripRepository.hasRecordedSomeLocations()
+        } else true
+
     // --- Other methods
     // ---------------------------------------------------
 
     override fun onLocationChanged(location: Location) {
         tripRepository.addLastKnownLocation(location)
-        Log.d(TAG, "New location received lat = ${location.latitude} long = ${location.longitude}")
+//        Log.d(TAG, "New location received lat = ${location.latitude} long = ${location.longitude}")
     }
 
     companion object {

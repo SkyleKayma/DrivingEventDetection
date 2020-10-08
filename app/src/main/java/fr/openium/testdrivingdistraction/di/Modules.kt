@@ -6,8 +6,10 @@ import fr.openium.testdrivingdistraction.ui.detail.ViewModelDetail
 import fr.openium.testdrivingdistraction.ui.detailList.ViewModelDetailList
 import fr.openium.testdrivingdistraction.ui.fakeEvents.ViewModelFakeEvents
 import fr.openium.testdrivingdistraction.ui.home.ViewModelHome
+import fr.openium.testdrivingdistraction.ui.settings.ViewModelSettings
 import fr.openium.testdrivingdistraction.utils.DateUtils
 import fr.openium.testdrivingdistraction.utils.PermissionsUtils
+import fr.openium.testdrivingdistraction.utils.PreferencesUtils
 import fr.openium.testdrivingdistraction.utils.ShareUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -34,6 +36,10 @@ object Modules {
         }
 
         single {
+            PreferencesUtils(androidContext())
+        }
+
+        single {
             Gson()
         }
     }
@@ -49,5 +55,6 @@ object Modules {
         viewModel { ViewModelFakeEvents(get()) }
         viewModel { ViewModelDetailList(get()) }
         viewModel { ViewModelDetail(get()) }
+        viewModel { ViewModelSettings(get()) }
     }
 }

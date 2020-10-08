@@ -11,21 +11,24 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_fragmentHome_to_fragmentSettings"
-            app:destination="@id/fragmentSettings" />
+            android:id="@+id/action_fragmentHome_to_fragmentPermissions"
+            app:destination="@id/fragmentPermissions" />
         <action
             android:id="@+id/action_fragmentHome_to_fragmentFakeEvents"
             app:destination="@id/fragmentFakeEvents" />
         <action
             android:id="@+id/action_fragmentHome_to_fragmentDetailList"
             app:destination="@id/fragmentDetailList" />
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentSettings"
+            app:destination="@id/fragmentSettings" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragmentSettings"
-        android:name="fr.openium.testdrivingdistraction.ui.settings.FragmentSettings"
-        android:label="@string/settings_screen_title"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/fragmentPermissions"
+        android:name="fr.openium.testdrivingdistraction.ui.permissions.FragmentPermissions"
+        android:label="@string/permissions_screen_title"
+        tools:layout="@layout/fragment_permissions" />
     <fragment
         android:id="@+id/fragmentFakeEvents"
         android:name="fr.openium.testdrivingdistraction.ui.fakeEvents.FragmentFakeEvents"
@@ -49,5 +52,10 @@
             android:name="begin_date"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentSettings"
+        android:name="fr.openium.testdrivingdistraction.ui.settings.FragmentSettings"
+        android:label="@string/settings_screen_title"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>
