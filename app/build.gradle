@@ -19,16 +19,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // TODO
     signingConfigs {
         debug {
             storeFile file("keys/debug.keystore")
         }
         release {
             storeFile file("keys/release.keystore")
-            storePassword "testdrivingdistraction"
-            keyAlias "testdrivingdistraction"
-            keyPassword "testdrivingdistraction"
+            storePassword "TestDrivingDistraction"
+            keyAlias "TestDrivingDistraction"
+            keyPassword "TestDrivingDistraction"
         }
     }
 
