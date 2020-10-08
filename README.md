@@ -9,11 +9,23 @@
 2. Possibilité d'importer et d'exporter les infos au format .json
 
 3. Captures:
+Home Not Recording
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/home_not_recording.jpg" width="200">
 
-![Home Not Recording](captures/home_not_recording.png)
-![Home Recording](captures/home_recording.png)
-![Permissions](captures/permissions.png)
-![Settings](captures/settings.png)
-![List](captures/list.png)
-![Detail](https://gitea.openium.fr/l.godart/driving-distraction/raw/commit/f04083e36dc0c588614c91f622f2d55d30885e65/captures/detail.jpg)
-![Detail With Info](captures/detail_with_info.png)
+Home Recording
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/home_recording.jpg" width="200">
+
+Permissions
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/permissions.jpg" width="200">
+
+Settings
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/settings.jpg" width="200">
+
+List
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/list.jpg" width="200">
+
+Detail
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/raw/branch/master/captures/detail.jpg" width="200">
+
+Detail With Info
+<img src="https://gitea.openium.fr/l.godart/driving-distraction/src/commit/286abf573c195853c327e87e244bef10b8e41dfe/captures/detail_with_info.jpg" width="200">
