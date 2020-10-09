@@ -31,13 +31,15 @@
     <!-- Permissions -->
     <string name="permissions_screen_title">Permissions</string>
     <string name="permissions_read_call_log">READ_CALL_LOG</string>
-    <string name="permissions_read_call_log_description">This permission allow us to …</string>
+    <string name="permissions_read_call_log_description">This permission allow us to know when user is in call.</string>
     <string name="permissions_read_phone_state">READ_PHONE_STATE</string>
-    <string name="permissions_read_phone_description">This permission allow us to …</string>
+    <string name="permissions_read_phone_description">This permission allow us to know the state of the call and if he send it or not.</string>
     <string name="permissions_receive_sms">RECEIVE_SMS</string>
     <string name="permissions_receive_sms_description">This permission allow us to know when user receive an SMS</string>
     <string name="permissions_location">ACCESS_FINE_LOCATION\nACCESS_BACKGROUND_LOCATION</string>
     <string name="permissions_location_description">This permission allow us to receive user location</string>
+    <string name="permissions_important">Important permission</string>
+    <string name="permissions_location_information">Without location permissions, it will be impossible to get localized accelerometer/gyroscope/events data.</string>
 
     <!-- Fake events -->
     <string name="fake_events_screen_title">Fake Events</string>
@@ -68,14 +70,14 @@
     <!-- Settings -->
     <string name="settings_screen_title">Parameters</string>
     <string name="settings_warning_recording">You can\'t modify any of these parameters when recording.</string>
-    <string name="settings_speed_accelerometer">Speed of accelerometer:</string>
-    <string name="settings_speed_gyroscope">Speed of gyroscope:</string>
+    <string name="settings_speed_accelerometer">Rate of accelerometer:</string>
+    <string name="settings_speed_gyroscope">Rate of gyroscope:</string>
     <string name="settings_speed_normal_rate">(200ms-220ms)</string>
     <string name="settings_speed_ui_rate">(60ms-80ms)</string>
     <string name="settings_speed_game_rate">(20ms-40ms)</string>
     <string name="settings_speed_fastest_rate">(0ms-20ms)</string>
     <string name="settings_rate_explanation_warning">Select what you think is the most appropriate for testing. The faster it is, the faster the battery will drain.</string>
-    <string name="settings_enable_disable_feature_title">What info do you want to get ?</string>
+    <string name="settings_enable_disable_feature_title">What do you want to record ?</string>
     <string name="settings_enable_accelerometer">Accelerometer:</string>
     <string name="settings_enable_gyroscope">Gyroscope:</string>
     <string name="settings_enable_location">Location:</string>

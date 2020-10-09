@@ -58,7 +58,7 @@ class DateUtils(context: Context) {
                     dateOnlyTimeToTimeTextFormat
             }.parse(date)
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing date")
+            Log.e(TAG, "Error parsing date $e")
             null
         }
 

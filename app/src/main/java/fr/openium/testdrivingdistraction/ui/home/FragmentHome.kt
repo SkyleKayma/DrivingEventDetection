@@ -232,12 +232,12 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
             .fromIOToMain()
             .subscribe({
                 if (requireContext().isServiceRunning(SensorAndLocationTrackingService::class.java) && isRecording()) {
-                    if (model.hasRecordedSomeLocations()) {
+                    if (canTrackData()) {
                         actualRecordState = RecordingState.STARTED
                         setDisplay()
                     } else setStartServiceTimer()
                 } else setStartServiceTimer()
-            }, { Log.e(TAG, "Error waiting for service to start") }).addTo(disposables)
+            }, { Log.e(TAG, "Error waiting for service to start $it") }).addTo(disposables)
     }
 
     private fun setStopServiceTimer() {
@@ -251,7 +251,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
                     actualRecordState = RecordingState.STOPPED
                     setDisplay()
                 } else setStopServiceTimer()
-            }, { Log.e(TAG, "Error waiting for service to stop") }).addTo(disposables)
+            }, { Log.e(TAG, "Error waiting for service to stop $it") }).addTo(disposables)
     }
 
     private fun isRecording(): Boolean =
@@ -269,6 +269,11 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         val serviceIntent = Intent(requireContext(), SensorAndLocationTrackingService::class.java)
         activity?.stopService(serviceIntent)
     }
+
+    private fun canTrackData(): Boolean =
+        if (permissionsUtils.isLocationPermissionGranted() && permissionsUtils.isBackgroundLocationPermissionGranted()) {
+            model.hasRecordedSomeLocations()
+        } else true
 
     // --- Other methods
     // ---------------------------------------------------

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingVertical="20dp"
-                android:text="Mandatory permission"
+                android:text="@string/permissions_important"
                 android:textColor="@color/colorOrange" />
 
             <LinearLayout
@@ -92,6 +92,18 @@
                 </FrameLayout>
 
             </LinearLayout>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="8dp"
+                android:text="@string/permissions_location_information"
+                android:textColor="@color/colorGrey3"
+                android:textStyle="italic"
+                app:drawableStartCompat="@drawable/ic_info"
+                app:drawableTint="@color/colorGrey3" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"

@@ -107,7 +107,7 @@ class FragmentDetailList : AbstractFragment(R.layout.fragment_detail_list) {
                 recyclerViewDetailList.show()
             }
         }, {
-            Log.e("", "Error getting trips")
+            Log.e("", "Error getting trips $it")
         }).addTo(disposables)
     }
 

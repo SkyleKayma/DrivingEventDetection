@@ -135,7 +135,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
             .subscribe({
                 preferencesUtils.accelerometerRecordEnabled = it
             }, {
-                Log.e(TAG, "Error checking accelerometer switch")
+                Log.e(TAG, "Error checking accelerometer switch $it")
             }).addTo(disposables)
     }
 
@@ -145,7 +145,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
             .subscribe({
                 preferencesUtils.gyroscopeRecordEnabled = it
             }, {
-                Log.e(TAG, "Error checking gyroscope switch")
+                Log.e(TAG, "Error checking gyroscope switch $it")
             }).addTo(disposables)
     }
 
@@ -155,7 +155,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
             .subscribe({
                 preferencesUtils.locationRecordEnabled = it
             }, {
-                Log.e(TAG, "Error checking location switch")
+                Log.e(TAG, "Error checking location switch $it")
             }).addTo(disposables)
     }
 
@@ -165,7 +165,7 @@ class FragmentSettings : AbstractFragment(R.layout.fragment_settings) {
             .subscribe({
                 preferencesUtils.eventsRecordEnabled = it
             }, {
-                Log.e(TAG, "Error checking events switch")
+                Log.e(TAG, "Error checking events switch $it")
             }).addTo(disposables)
     }
 

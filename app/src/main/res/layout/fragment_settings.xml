@@ -26,14 +26,14 @@
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:drawablePadding="8dp"
                 android:gravity="center"
                 android:text="@string/settings_warning_recording"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorRed"
                 android:textStyle="italic"
-                app:drawableStartCompat="@drawable/ic_warning"
-                app:drawableTint="@color/colorRed" />
+                app:drawableTint="@color/colorRed"
+                app:drawableTopCompat="@drawable/ic_warning" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Subhead"
@@ -86,7 +86,7 @@
                 android:background="@color/colorGrey" />
 
             <TextView
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -185,7 +185,9 @@
                 android:drawablePadding="8dp"
                 android:text="@string/settings_fake_events_explanation"
                 android:textColor="@color/colorGrey3"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                app:drawableStartCompat="@drawable/ic_info"
+                app:drawableTint="@color/colorGrey3" />
 
         </LinearLayout>
 
