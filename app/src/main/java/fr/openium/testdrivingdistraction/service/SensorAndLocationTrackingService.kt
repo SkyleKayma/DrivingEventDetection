@@ -130,19 +130,9 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
     // --- Life cycle
     // ---------------------------------------------------
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        startForeground(1, getNotification())
-
-        isRunning = true
-
-        return START_NOT_STICKY
-    }
-
-    override fun onBind(intent: Intent?): IBinder? =
-        null
-
     override fun onCreate() {
         super.onCreate()
+        startForeground(1, getNotification())
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -164,6 +154,14 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         // Start record
         tripRepository.startTripRecording()
     }
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        isRunning = true
+        return START_NOT_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? =
+        null
 
     override fun onDestroy() {
         super.onDestroy()
