@@ -282,7 +282,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
     }
 
     private fun isRecording(): Boolean =
-        model.isRecording()
+        model.isRecording() && actualRecordState != RecordingState.CALCULATING_STATE
 
     // --- Service related methods
     // ---------------------------------------------------
