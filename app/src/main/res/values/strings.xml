@@ -16,10 +16,12 @@
     <!-- Home -->
     <string name="home_error_service_starting">Service is starting. Please wait</string>
     <string name="home_error_service_stopping">Service is stopping. Please wait</string>
+    <string name="home_error_service_retrieve_state">Service is retrieving a valid state. Please wait</string>
     <string name="home_trip_start_recording">Start Record</string>
     <string name="home_trip_starting_recording">Starting Record</string>
     <string name="home_trip_stop_recording">Stop Record</string>
     <string name="home_trip_stopping_recording">Stopping Recording</string>
+    <string name="home_trip_stopping_calculate_state">Ending pending record</string>
     <string name="home_permissions_missing">Missing permissions.\nEvents may not be correctly reported.</string>
     <string name="home_permissions_granted">All permissions have been granted</string>
     <string name="home_add_some_fake_events">Add some fake events</string>

@@ -14,15 +14,22 @@ class ViewModelHome(
     fun isRecording(): Boolean =
         tripRepository.isRecording()
 
-    fun addSensorHangUpEvent() =
+    fun addSensorHangUpEvent() {
         tripRepository.addSensorEvent(TripSensorEvent.Type.HANG_UP)
+    }
 
-    fun addSensorHangUsageEvent() =
+    fun addSensorHangUsageEvent() {
         tripRepository.addSensorEvent(TripSensorEvent.Type.HAND_USAGE)
+    }
 
-    fun addSensorPickUpEvent() =
+    fun addSensorPickUpEvent() {
         tripRepository.addSensorEvent(TripSensorEvent.Type.PICK_UP)
+    }
 
     fun hasRecordedSomeLocations(): Boolean =
         tripRepository.hasRecordedSomeLocations()
+
+    fun endPendingRecord() {
+        tripRepository.endPendingRecord()
+    }
 }

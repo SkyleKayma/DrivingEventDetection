@@ -132,6 +132,9 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         startForeground(1, getNotification())
+
+        isRunning = true
+
         return START_NOT_STICKY
     }
 
@@ -181,6 +184,8 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
         // Stop record
         tripRepository.stopTripRecording()
+
+        isRunning = false
     }
 
     // --- Methods
@@ -297,5 +302,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
 
         const val MILLISECONDS_INTERVAL = 1000L
         const val METERS_DISTANCE = 1f
+
+        var isRunning = false
     }
 }

@@ -11,29 +11,37 @@ class ViewModelFakeEvents(
     private val tripRepository: TripRepository
 ) : AbstractViewModel() {
 
-    fun addScreenOnEvent() =
+    fun addScreenOnEvent() {
         tripRepository.addEvent(TripEvent.Type.SCREEN_ON, true)
+    }
 
-    fun addScreenOffEvent() =
+    fun addScreenOffEvent() {
         tripRepository.addEvent(TripEvent.Type.SCREEN_OFF, true)
+    }
 
-    fun addScreenUnlockEvent() =
+    fun addScreenUnlockEvent() {
         tripRepository.addEvent(TripEvent.Type.SCREEN_UNLOCK, true)
+    }
 
-    fun addCallReceivedEvent() =
+    fun addCallReceivedEvent() {
         tripRepository.addEvent(TripEvent.Type.RECEIVE_CALL, true)
+    }
 
-    fun addCallHookedEvent() =
+    fun addCallHookedEvent() {
         tripRepository.addEvent(TripEvent.Type.HOOK_CALL, true)
+    }
 
-    fun addCallNotHookedEvent() =
+    fun addCallNotHookedEvent() {
         tripRepository.addEvent(TripEvent.Type.NOT_HOOK_CALL, true)
+    }
 
-    fun addCallSentEvent() =
+    fun addCallSentEvent() {
         tripRepository.addEvent(TripEvent.Type.SEND_CALL, true)
+    }
 
-    fun addSMSReceivedEvent() =
+    fun addSMSReceivedEvent() {
         tripRepository.addEvent(TripEvent.Type.RECEIVE_SMS, true)
+    }
 
     fun isRecording(): Boolean =
         tripRepository.isRecording()
