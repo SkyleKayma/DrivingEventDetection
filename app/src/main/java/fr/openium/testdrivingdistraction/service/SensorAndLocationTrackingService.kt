@@ -127,6 +127,18 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         }
     }
 
+    private val usbAttachedDetached = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (canTrackData()) {
+                if (intent.extras?.getBoolean("connected") == true) {
+                    tripRepository.addEvent(TripEvent.Type.USB_ATTACHED)
+                } else {
+                    tripRepository.addEvent(TripEvent.Type.USB_DETACHED)
+                }
+            }
+        }
+    }
+
     // --- Life cycle
     // ---------------------------------------------------
 
@@ -149,6 +161,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
             applicationContext.registerReceiver(screenOnReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
             applicationContext.registerReceiver(screenOffReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
             applicationContext.registerReceiver(unlockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+            applicationContext.registerReceiver(usbAttachedDetached, IntentFilter("android.hardware.usb.action.USB_STATE"))
         }
 
         // Start record
@@ -178,6 +191,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
             applicationContext.unregisterReceiver(screenOnReceiver)
             applicationContext.unregisterReceiver(screenOffReceiver)
             applicationContext.unregisterReceiver(unlockReceiver)
+            applicationContext.unregisterReceiver(usbAttachedDetached)
         }
 
         // Stop record

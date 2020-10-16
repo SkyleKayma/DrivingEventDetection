@@ -22,6 +22,8 @@ open class TripEvent(
         NOT_HOOK_CALL(R.drawable.ic_event_not_hook),
         SEND_CALL(R.drawable.ic_event_send_call),
         RECEIVE_SMS(R.drawable.ic_event_sms_receive),
+        USB_ATTACHED(R.drawable.ic_event_usb_attached),
+        USB_DETACHED(R.drawable.ic_event_usb_attached),
         UNKNOWN(R.drawable.ic_event_unknown);
 
         companion object {

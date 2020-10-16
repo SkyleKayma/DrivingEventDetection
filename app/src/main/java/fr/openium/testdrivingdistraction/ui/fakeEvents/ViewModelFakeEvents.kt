@@ -43,6 +43,14 @@ class ViewModelFakeEvents(
         tripRepository.addEvent(TripEvent.Type.RECEIVE_SMS, true)
     }
 
+    fun addUSBAttachedEvent() {
+        tripRepository.addEvent(TripEvent.Type.USB_ATTACHED, true)
+    }
+
+    fun addUSBDetachedEvent() {
+        tripRepository.addEvent(TripEvent.Type.USB_DETACHED, true)
+    }
+
     fun isRecording(): Boolean =
         tripRepository.isRecording()
 

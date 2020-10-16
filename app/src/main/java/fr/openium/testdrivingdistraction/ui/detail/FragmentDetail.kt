@@ -180,6 +180,10 @@ class FragmentDetail : AbstractFragment(R.layout.fragment_detail) {
             trip?.events?.filter { it.type == TripEvent.Type.SEND_CALL.name }?.count()?.toString()
         textViewDetailNbReceiveSMSEvent.text =
             trip?.events?.filter { it.type == TripEvent.Type.RECEIVE_SMS.name }?.count()?.toString()
+        textViewDetailUSBAttachedEvent.text =
+            trip?.events?.filter { it.type == TripEvent.Type.USB_ATTACHED.name }?.count()?.toString()
+        textViewDetailUSBDetachedEvent.text =
+            trip?.events?.filter { it.type == TripEvent.Type.USB_DETACHED.name }?.count()?.toString()
 
         // Set markers
         textViewDetailNbHangUpMarkers.text =

@@ -104,6 +104,18 @@ class FragmentFakeEvents : AbstractFragment(R.layout.fragment_fake_events) {
                 model.addSMSReceivedEvent()
             } else snackbar(getString(R.string.generic_error_start_record_first), Snackbar.LENGTH_SHORT)
         }
+
+        buttonHomeFakeUSBAttached.setOnClickListener {
+            if (isRecording()) {
+                model.addUSBAttachedEvent()
+            } else snackbar(getString(R.string.generic_error_start_record_first), Snackbar.LENGTH_SHORT)
+        }
+
+        buttonHomeFakeUSBDetached.setOnClickListener {
+            if (isRecording()) {
+                model.addUSBDetachedEvent()
+            } else snackbar(getString(R.string.generic_error_start_record_first), Snackbar.LENGTH_SHORT)
+        }
     }
 
     private fun setFakeScreenOnOffButtonDisplay() {

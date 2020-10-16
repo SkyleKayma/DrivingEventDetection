@@ -40,6 +40,8 @@
     <string name="permissions_receive_sms_description">This permission allow us to know when user receive an SMS</string>
     <string name="permissions_location">ACCESS_FINE_LOCATION\nACCESS_BACKGROUND_LOCATION</string>
     <string name="permissions_location_description">This permission allow us to receive user location</string>
+    <string name="permissions_usb_device">USB_DEVICE</string>
+    <string name="permissions_usb_device_description">This permission allow us to know when user plug something in the USB port</string>
     <string name="permissions_important">Important permission</string>
     <string name="permissions_location_information">Without location permissions, it will be impossible to get localized accelerometer/gyroscope/events data.</string>
 
@@ -53,6 +55,8 @@
     <string name="fake_events_fake_call_not_hooked">Fake\nNot Hook\nCall</string>
     <string name="fake_events_fake_call_sent">Fake\nSend\nCall</string>
     <string name="fake_events_fake_sms_received">Fake\nReceive\nSMS</string>
+    <string name="fake_events_fake_usb_attached">Fake\nUSB\nAttached</string>
+    <string name="fake_events_fake_usb_detached">Fake\nUSB\nDetached</string>
 
     <!-- Detail list -->
     <string name="detail_list_screen_title">Records list</string>

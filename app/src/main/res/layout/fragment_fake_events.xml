@@ -145,6 +145,47 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp">
+
+                <View
+                    android:id="@+id/viewHomeFakeUSBAttachedDetachedHelper"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/buttonHomeFakeUSBAttached"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="@dimen/home_margin_big_button"
+                    android:text="@string/fake_events_fake_usb_attached"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/viewHomeFakeUSBAttachedDetachedHelper"
+                    app:layout_constraintEnd_toStartOf="@id/buttonHomeFakeUSBDetached"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/viewHomeFakeUSBAttachedDetachedHelper" />
+
+                <Button
+                    android:id="@+id/buttonHomeFakeUSBDetached"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/home_margin_big_button"
+                    android:text="@string/fake_events_fake_usb_detached"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/viewHomeFakeUSBAttachedDetachedHelper"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/buttonHomeFakeUSBAttached"
+                    app:layout_constraintTop_toTopOf="@id/viewHomeFakeUSBAttachedDetachedHelper" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </ScrollView>
