@@ -29,7 +29,7 @@ class ViewModelHome(
     fun hasRecordedSomeLocations(): Boolean =
         tripRepository.hasRecordedSomeLocations()
 
-    fun endPendingRecord() {
-        tripRepository.endPendingRecord()
+    fun deletePendingRecord() {
+        tripRepository.deletePendingRecord()
     }
 }

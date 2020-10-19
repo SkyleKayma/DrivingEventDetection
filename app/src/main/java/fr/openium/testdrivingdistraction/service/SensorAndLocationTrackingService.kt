@@ -20,9 +20,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import fr.openium.testdrivingdistraction.R
 import fr.openium.testdrivingdistraction.enum.SensorRate
+import fr.openium.testdrivingdistraction.model.Trip
+import fr.openium.testdrivingdistraction.model.TripAccelerometer
 import fr.openium.testdrivingdistraction.model.TripEvent
+import fr.openium.testdrivingdistraction.model.TripGyroscope
 import fr.openium.testdrivingdistraction.repository.TripRepository
 import fr.openium.testdrivingdistraction.ui.home.FragmentHome
+import fr.openium.testdrivingdistraction.utils.DateUtils
 import fr.openium.testdrivingdistraction.utils.PermissionsUtils
 import fr.openium.testdrivingdistraction.utils.PreferencesUtils
 import org.koin.android.ext.android.inject
@@ -33,6 +37,9 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
     private val tripRepository: TripRepository by inject()
     private val permissionsUtils: PermissionsUtils by inject()
     private val preferencesUtils: PreferencesUtils by inject()
+    private val dateUtils: DateUtils by inject()
+
+    private lateinit var trip: Trip
 
     private lateinit var locationManager: LocationManager
     private lateinit var sensorManager: SensorManager
@@ -48,7 +55,14 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
                 val x = sensorEvent.values[0]
                 val y = sensorEvent.values[1]
                 val z = sensorEvent.values[2]
-                tripRepository.addAccelerometerValue(x, y, z)
+                trip.accelerometer.add(
+                    TripAccelerometer(
+                        date = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL),
+                        x = x.toDouble(),
+                        y = y.toDouble(),
+                        z = z.toDouble()
+                    )
+                )
 
 //                Log.d(TAG, "New accelerometer values received x = $x y = $y z = $z")
             }
@@ -62,7 +76,15 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
                 val x = sensorEvent.values[0]
                 val y = sensorEvent.values[1]
                 val z = sensorEvent.values[2]
-                tripRepository.addGyroscopeValue(x, y, z)
+
+                trip.gyroscope.add(
+                    TripGyroscope(
+                        date = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL),
+                        x = x.toDouble(),
+                        y = y.toDouble(),
+                        z = z.toDouble()
+                    )
+                )
 
 //                Log.d(TAG, "New gyroscope values received x = $x y = $y z = $z")
             }
@@ -165,7 +187,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         }
 
         // Start record
-        tripRepository.startTripRecording()
+        trip = tripRepository.startTripRecording()
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -195,7 +217,7 @@ class SensorAndLocationTrackingService : Service(), LocationListener {
         }
 
         // Stop record
-        tripRepository.stopTripRecording()
+        tripRepository.stopTripRecording(trip)
 
         isRunning = false
     }

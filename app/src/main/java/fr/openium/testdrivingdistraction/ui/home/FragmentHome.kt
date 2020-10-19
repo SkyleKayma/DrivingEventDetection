@@ -24,7 +24,6 @@ import fr.openium.testdrivingdistraction.ext.navigate
 import fr.openium.testdrivingdistraction.service.SensorAndLocationTrackingService
 import fr.openium.testdrivingdistraction.ui.home.dialog.DialogNoLocationPermission
 import fr.openium.testdrivingdistraction.utils.PermissionsUtils
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -58,21 +57,11 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
 
         // Get actual running state
         actualRecordState = if (isRecording()) {
-            if (SensorAndLocationTrackingService.isRunning) {
-                RecordingState.STARTED
-            } else {
-                // This can be a very time demanding function, we can't do it on main thread
-                Completable.fromCallable {
-                    model.endPendingRecord()
-                }.fromIOToMain().subscribe({
-                    actualRecordState = RecordingState.STOPPED
-                    setDisplay()
-                }, {
-                    Log.e(TAG, "Error ending pending trip $it")
-                }).addTo(disposables)
-                RecordingState.CALCULATING_STATE
-            }
-        } else RecordingState.STOPPED
+            RecordingState.STARTED
+        } else {
+            model.deletePendingRecord()
+            RecordingState.STOPPED
+        }
 
         setDisplay()
         setListeners()
@@ -136,11 +125,6 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
                 buttonHomeStartTrip.backgroundTintList = getColorStateListFromColor(R.color.colorPrimaryDark)
                 (buttonHomeStartTrip as MaterialButton).setIconResource(R.drawable.ic_loading)
                 buttonHomeStartTrip.text = getString(R.string.home_trip_stopping_recording)
-            }
-            RecordingState.CALCULATING_STATE -> {
-                buttonHomeStartTrip.backgroundTintList = getColorStateListFromColor(R.color.colorOrange)
-                (buttonHomeStartTrip as MaterialButton).setIconResource(R.drawable.ic_loading)
-                buttonHomeStartTrip.text = getString(R.string.home_trip_stopping_calculate_state)
             }
         }
     }
@@ -245,9 +229,6 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
 
                 setStartServiceTimer()
             }
-            RecordingState.CALCULATING_STATE -> {
-                snackbar(getString(R.string.home_error_service_retrieve_state), Snackbar.LENGTH_SHORT)
-            }
         }
     }
 
@@ -258,7 +239,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         startServiceTimer = Observable.timer(100, TimeUnit.MILLISECONDS)
             .fromIOToMain()
             .subscribe({
-                if (SensorAndLocationTrackingService.isRunning && isRecording()) {
+                if (isRecording()) {
                     if (canTrackData()) {
                         actualRecordState = RecordingState.STARTED
                         setDisplay()
@@ -274,7 +255,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         stopServiceTimer = Observable.timer(100, TimeUnit.MILLISECONDS)
             .fromIOToMain()
             .subscribe({
-                if (!SensorAndLocationTrackingService.isRunning && !isRecording()) {
+                if (!isRecording()) {
                     actualRecordState = RecordingState.STOPPED
                     setDisplay()
                 } else setStopServiceTimer()
@@ -282,7 +263,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
     }
 
     private fun isRecording(): Boolean =
-        model.isRecording() && actualRecordState != RecordingState.CALCULATING_STATE
+        model.isRecording() && SensorAndLocationTrackingService.isRunning
 
     // --- Service related methods
     // ---------------------------------------------------
@@ -309,8 +290,7 @@ class FragmentHome : AbstractFragment(R.layout.fragment_home) {
         STARTING,
         STARTED,
         STOPPING,
-        STOPPED,
-        CALCULATING_STATE
+        STOPPED
     }
 
     companion object {

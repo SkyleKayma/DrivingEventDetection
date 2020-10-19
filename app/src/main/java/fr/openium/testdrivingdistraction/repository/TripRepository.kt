@@ -1,7 +1,10 @@
 package fr.openium.testdrivingdistraction.repository
 
 import android.location.Location
-import fr.openium.testdrivingdistraction.model.*
+import fr.openium.testdrivingdistraction.model.Trip
+import fr.openium.testdrivingdistraction.model.TripEvent
+import fr.openium.testdrivingdistraction.model.TripLocation
+import fr.openium.testdrivingdistraction.model.TripSensorEvent
 import fr.openium.testdrivingdistraction.utils.DateUtils
 import io.reactivex.Flowable
 import io.realm.Realm
@@ -15,22 +18,27 @@ class TripRepository(private val dateUtils: DateUtils) {
 
     // --- Start / Stop record
 
-    fun startTripRecording() {
+    fun startTripRecording(): Trip {
         Realm.getDefaultInstance().use { realm ->
+            val trip = Trip(beginDate = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL))
             realm.executeTransaction {
-                realm.insertOrUpdate(
-                    Trip(beginDate = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL))
-                )
+                realm.insertOrUpdate(trip)
             }
+            return trip
         }
     }
 
-    fun stopTripRecording() {
+    fun stopTripRecording(trip: Trip) {
         Realm.getDefaultInstance().use { realm ->
             realm.executeTransaction {
-                getCurrentRecordingTrip(realm)?.let {
-                    it.endDate = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL)
-                }
+                val tripInDB = getCurrentRecordingTrip(realm)
+
+                trip.endDate = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL)
+                trip.sensorEvents.addAll(tripInDB?.sensorEvents ?: listOf())
+                trip.events.addAll(tripInDB?.events ?: listOf())
+                trip.locations.addAll(tripInDB?.locations ?: listOf())
+
+                realm.insertOrUpdate(trip)
             }
         }
     }
@@ -99,40 +107,6 @@ class TripRepository(private val dateUtils: DateUtils) {
     fun hasRecordedSomeLocations(): Boolean =
         getLastKnownLocation() != null
 
-    // Accelerometer
-
-    fun addAccelerometerValue(x: Float, y: Float, z: Float) {
-        Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction {
-                getCurrentRecordingTrip(realm)?.accelerometer?.add(
-                    TripAccelerometer(
-                        date = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL),
-                        x = x.toDouble(),
-                        y = y.toDouble(),
-                        z = z.toDouble()
-                    )
-                )
-            }
-        }
-    }
-
-    // Gyroscope
-
-    fun addGyroscopeValue(x: Float, y: Float, z: Float) {
-        Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction {
-                getCurrentRecordingTrip(realm)?.gyroscope?.add(
-                    TripGyroscope(
-                        date = dateUtils.format(System.currentTimeMillis(), DateUtils.Format.DATE_FULL),
-                        x = x.toDouble(),
-                        y = y.toDouble(),
-                        z = z.toDouble()
-                    )
-                )
-            }
-        }
-    }
-
     // Sensor Events
 
     fun addSensorEvent(eventType: TripSensorEvent.Type) {
@@ -187,49 +161,10 @@ class TripRepository(private val dateUtils: DateUtils) {
         }
     }
 
-    fun endPendingRecord() {
+    fun deletePendingRecord() {
         Realm.getDefaultInstance().use { realm ->
             realm.executeTransaction {
-                val pendingTrip = getCurrentRecordingTrip(realm)
-
-                val lastAccelerometerTimeReceived =
-                    pendingTrip?.accelerometer?.map {
-                        dateUtils.parse(it.date ?: "", DateUtils.Format.DATE_FULL)?.time
-                    }?.sortedByDescending { it }?.firstOrNull() ?: 0L
-
-                val lastGyroscopeTimeReceived =
-                    pendingTrip?.gyroscope?.map {
-                        dateUtils.parse(it.date ?: "", DateUtils.Format.DATE_FULL)?.time
-                    }?.sortedByDescending { it }?.firstOrNull() ?: 0L
-
-                val lastLocationTimeReceived =
-                    pendingTrip?.locations?.map {
-                        dateUtils.parse(it.date ?: "", DateUtils.Format.DATE_FULL)?.time
-                    }?.sortedByDescending { it }?.firstOrNull() ?: 0L
-
-                val lastEventTimeReceived =
-                    pendingTrip?.events?.map {
-                        dateUtils.parse(it.date ?: "", DateUtils.Format.DATE_FULL)?.time
-                    }?.sortedByDescending { it }?.firstOrNull() ?: 0L
-
-                val lastSensorEventTimeReceived =
-                    pendingTrip?.sensorEvents?.map {
-                        dateUtils.parse(it.date ?: "", DateUtils.Format.DATE_FULL)?.time
-                    }?.sortedByDescending { it }?.firstOrNull() ?: 0L
-
-                val startDate =
-                    dateUtils.parse(pendingTrip?.beginDate ?: "", DateUtils.Format.DATE_FULL)?.time ?: 0L
-
-                val mostRecentTimeReceived = maxOf(
-                    startDate,
-                    lastAccelerometerTimeReceived,
-                    lastGyroscopeTimeReceived,
-                    lastLocationTimeReceived,
-                    lastEventTimeReceived,
-                    lastSensorEventTimeReceived
-                )
-
-                pendingTrip?.endDate = dateUtils.format(mostRecentTimeReceived, DateUtils.Format.DATE_FULL)
+                getCurrentRecordingTrip(realm)?.deleteFromRealm()
             }
         }
     }
